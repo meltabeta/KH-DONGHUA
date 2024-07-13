@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KH-Donghua</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30">
+    <script type="module" src="homepage.js" defer></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <style>
+        /* Additional styles */
+        .welcome-message {
+            text-align: center;
+            margin-top: 20px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2em;
+            color: #ccc;
+        }
+
+        .credit-message {
+            text-align: center;
+            margin-top: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 0.8em;
+            color: #999;
+        }
+
+        .filter-bar {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .filter-bar button {
+            margin: 0 5px;
+            padding: 10px 20px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .filter-bar button:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .filter-bar button:active {
+            background-color: #ddd;
+            box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(1px);
+        }
+
+        .playlist-item {
+            background-color: #252525;
+            padding: 1em;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            animation: fadeInUp 0.5s ease forwards;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+
+        .playlist-item img {
+            max-width: 100%;
+            border-radius: 4px;
+            transition: transform 0.3s ease; /* Add transition for image scaling */
+        }
+
+        .playlist-item h3 {
+            margin: 0.5em 0 0;
+        }
+
+        .playlist-item:hover {
+            transform: translateY(-8px) scale(1.05); /* Adjust the scale value for desired pop effect */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .playlist-item:hover img {
+            transform: scale(1.1); /* Scale the image on hover */
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .pagination button {
+            margin: 0 5px;
+            padding: 10px 20px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #fff;
+            color: black; /* Set text color to black */
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .pagination button:active {
+            background-color: #ddd;
+            box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(1px);
+        }
+
+        /* Styles for the pop-up */
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            position: relative;
+        }
+
+        .popup-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .close-popup {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6347;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Swiper container styles */
+        .swiper-container {
+            width: 100%;
+            height: 300px; /* Fixed height */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .swiper-slide {
+            display: none; /* Hide slides */
+        }
+
+        .swiper-overlay {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            color: #fff;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        .swiper-title {
+            text-align: center;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1.5em;
+            color: #fff;
+            margin-top: 10px;
+        }
+
+        .search-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .search-container input {
+            padding: 10px;
+            margin-right: 5px;
+            width: 200px;
+            border: none;
+            border-radius: 5px;
+            background: #333;
+            color: #fff;
+        }
+
+        .search-container button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background: #007BFF;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-right: 5px; /* Add margin to the button */
+        }
+
+        .search-container button:last-child {
+            margin-right: 0; /* Remove margin from the last button */
+        }
+
+        .search-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .search-container button:active {
+            background-color: #00408a;
+        }
+
+        @media (max-width: 1024px) {
+            .video-playlist {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            header h1 {
+                font-size: 1.2em;
+            }
+
+            .search-container input {
+                width: 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .video-playlist {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, auto);
+            }
+
+            .filter-bar button {
+                padding: 8px 16px;
+                font-size: 0.9em;
+            }
+
+            .pagination button {
+                padding: 0.5em;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .search-container input {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .search-container button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .nav-container {
+                top: auto;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .header-clock {
+                position: static;
+                transform: translateY(0);
+                margin-bottom: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-playlist {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, auto);
+            }
+
+            header {
+                flex-direction: column;
+                align-items: center;
+                padding: 0.5em;
+            }
+
+            header h1 {
+                font-size: 1em;
+            }
+
+            .search-container {
+                flex-direction: row;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .search-container input {
+                width: 60%;
+                margin-right: 0.5em;
+            }
+
+            .search-container button {
+                margin-left: 0.5em;
+            }
+
+            .nav-container {
+                top: auto;
+                bottom: 10px;
+                right: 10px;
+            }
+
+            main {
+                padding: 1em;
+            }
+
+            .welcome-message, .credit-message {
+                font-size: 1em;
+            }
+
+            .filter-bar {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                width: 100%;
+            }
+
+            .filter-bar button {
+                width: auto;
+                margin: 0 5px;
+            }
+
+            .swiper-container {
+                height: 200px;
+            }
+
+            .swiper-title {
+                font-size: 1em;
+            }
+
+            .search-container input {
+                width: 100%;
+            }
+
+            .header-clock {
+                position: static;
+                transform: translateY(0);
+                margin-bottom: 10px;
+            }
+        }
+
+        .digital-clock {
+            text-align: center;
+            color: #00ffcc;
+            font-family: 'Roboto Mono', monospace;
+            text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc;
+        }
+
+        .digital-clock .date {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .digital-clock .time {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-clock" id="clock-container">
+        <div class="digital-clock">
+            <div class="date" id="clock-date"></div>
+            <div class="time" id="clock-time"></div>
+        </div>
+    </div>
+    <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-Donghua Logo">
+    <h1>KH-Donghua</h1>
+    <div class="nav-container">
+        <a href="#" id="donateLink">Donate</a>
+    </div>
+</header>
+<main>
+    <!-- Search Container -->
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search by video title...">
+        <button id="searchBtn">Search</button>
+        <button id="clearBtn">Clear</button>
+    </div>
+
+    <!-- Carousel -->
+    <div class="swiper-container" id="swiper-container">
+        <div class="swiper-wrapper" id="swiper-wrapper">
+            <!-- Slides will be added here dynamically -->
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <!-- Overlay for playlist name -->
+        <div class="swiper-overlay" id="swiper-overlay"></div>
+    </div>
+    <div class="swiper-title" id="swiper-title"></div>
+
+    <div class="welcome-message">Welcome to my website!<br></div>
+
+    <div class="filter-bar">
+        <button id="filterAllBtn">Home</button>
+        <button id="filterAnimeBtn">Anime</button>
+        <button id="filterDonghuaBtn">Donghua</button>
+    </div>
+
+    <h2>Home</h2>
+    <section class="video-playlist"></section>
+    <div class="pagination">
+        <button id="previousBtn">Previous</button>
+        <span id="pageNumber">1</span>
+        <button id="nextBtn">Next</button>
+    </div>
+</main>
+
+<footer>
+    <div class="credit-message">This website built by <span style="font-family: 'Meta Beta', sans-serif;">SEANG SENGLY(Meta Beta)</span></div>
+</footer>
+
+<!-- Pop-up for Donate -->
+<div class="popup" id="donatePopup">
+    <div class="popup-content">
+        <button class="close-popup" id="closePopup">&times;</button>
+        <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/bakong.jpg?alt=media&token=b7b3de62-76e4-4887-a0af-bc7728eebb32" alt="Donate">
+    </div>
+</div>
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    // JavaScript for pop-up functionality
+    const donateLink = document.getElementById('donateLink');
+    const donatePopup = document.getElementById('donatePopup');
+    const closePopup = document.getElementById('closePopup');
+
+    donateLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        donatePopup.style.display = 'flex';
+    });
+
+    closePopup.addEventListener('click', () => {
+        donatePopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === donatePopup) {
+            donatePopup.style.display = 'none';
+        }
+    });
+
+    // Initialize Swiper
+    const swiper = new Swiper('.swiper-container', {
+        loop: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        autoplay: {
+            delay: 3000, // 3 seconds delay
+            disableOnInteraction: false,
+        },
+    });
+
+    // Digital Clock Functionality
+    function updateClock() {
+        const now = new Date();
+        const date = now.toISOString().split('T')[0];
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const time = `${hours}:${minutes}:${seconds}`;
+
+        document.getElementById('clock-date').textContent = date;
+        document.getElementById('clock-time').textContent = time;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock(); // Initial call to set the clock immediately
+</script>
+</body>
+</html>

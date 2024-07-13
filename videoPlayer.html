@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KH-Donghua Video Player</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30">
+    <script type="module" src="videoPlayer.js" defer></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1em 2em;
+            background-color: #1f1f1f;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            position: relative;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .header-left img {
+            height: 75px;
+            animation: rotate 10s infinite linear;
+        }
+
+        .header-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .header-center h1 {
+            margin: 0;
+            font-size: 2em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: pop 1s ease-out;
+        }
+
+        .digital-clock {
+            text-align: center;
+            color: #00ffcc;
+            font-family: 'Roboto Mono', monospace; /* Use a monospace font for a digital look */
+            text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc;
+            font-size: 0.5em; /* Adjusted font size */
+            background-color: #333;
+            padding: 5px 10px; /* Adjusted padding */
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-top: 0.5em;
+        }
+
+        .digital-clock .date {
+            font-size: 0.4em; /* Adjusted font size */
+            margin-top: 5px;
+        }
+
+        .back-button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            z-index: 1000;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .back-button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2em;
+            transition: padding 0.3s ease;
+        }
+
+        .video-container {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 1s ease-out;
+            position: relative;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-info {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .video-info h2 {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+
+        .episode-dropdown-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .episode-dropdown {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 400px;
+            background-color: #333;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .episode-dropdown:hover {
+            background-color: #444;
+        }
+
+        .episode-controls {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .episode-controls button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .episode-controls button:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .episode-controls button:active {
+            background-color: #ddd;
+            box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(1px);
+        }
+
+        .episode-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+            width: 100%;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .episode-item {
+            background-color: #252525;
+            padding: 1em;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .episode-item:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .episode-item img {
+            max-width: 100%;
+            border-radius: 4px;
+        }
+
+        .episode-item h3 {
+            margin: 0.5em 0 0;
+            color: #fff;
+        }
+
+        .episode-item p {
+            margin: 0.5em 0 0;
+            color: #bbb;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1em;
+            background-color: #1f1f1f;
+            color: #999;
+        }
+
+        @keyframes pop {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInList {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Media queries for responsiveness */
+        @media (max-width: 768px) {
+            main {
+                padding: 1em;
+            }
+
+            .episode-controls {
+                flex-direction: column;
+            }
+
+            .episode-controls button {
+                margin: 10px 0;
+                width: 100%;
+            }
+
+            .episode-list {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 0.5em;
+            }
+
+            .video-info h2 {
+                font-size: 1.2em;
+            }
+
+            .episode-controls button {
+                padding: 0.5em;
+                font-size: 0.9em;
+            }
+
+            .episode-list {
+                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+                gap: 10px;
+            }
+
+            .episode-item {
+                padding: 0.5em;
+            }
+
+            .episode-item h3 {
+                font-size: 0.9em;
+            }
+
+            .episode-item p {
+                font-size: 0.8em;
+            }
+
+            .back-button {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .episode-dropdown {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-left">
+        <a href="index.html"><img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-Donghua Logo" class="logo"></a>
+    </div>
+    <div class="header-center">
+        <h1>KH-Donghua</h1>
+        <div id="clock" class="digital-clock">
+            <div class="time"></div>
+            <div class="date"></div>
+        </div>
+    </div>
+</header>
+<main>
+    <a href="index.html" class="back-button">Back</a>
+    <div class="video-container">
+        <div class="episode-dropdown-container">
+            <select id="episodeDropdown" class="episode-dropdown">
+                <!-- Episodes will be dynamically generated here -->
+            </select>
+        </div>
+        <div class="video-placeholder"></div> <!-- Placeholder for iframe -->
+        <div class="video-info">
+            <h2 id="videoTitle">Now you're watching: Episode 1</h2>
+        </div>
+        <div class="episode-controls">
+            <button id="prevEpisodeBtn">Previous</button>
+            <button id="nextEpisodeBtn">Next</button>
+        </div>
+        <div class="episode-list" id="episodeList">
+            <!-- Episodes will be dynamically generated here -->
+        </div>
+        <br>
+    </div>
+</main>
+<footer>
+    <div class="credit-message">This website built by <span style="font-family: 'Meta Beta', sans-serif;">SEANG SENGLY</span></div>
+</footer>
+<script>
+    function updateClock() {
+        const clock = document.getElementById('clock');
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        const date = now.toISOString().split('T')[0];
+        clock.querySelector('.time').textContent = `${hours}:${minutes}:${seconds}`;
+        clock.querySelector('.date').textContent = date;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock(); // Initial call to display clock immediately
+</script>
+</body>
+</html>
