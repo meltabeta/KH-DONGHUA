@@ -4,6 +4,7 @@ body, html {
     padding: 0;
     height: 100vh;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     transition: background-color 0.3s, color 0.3s;
@@ -330,6 +331,16 @@ body.light-mode :root {
 .actions button {
     flex: 1 1 45%;
     margin: 5px;
+}
+
+.footer {
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    background: var(--container-bg);
+    color: var(--text-color);
 }
 
 @media (max-width: 768px) {
