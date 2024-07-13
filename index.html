@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-mode">
+<div class="theme-switch">
+    <label for="themeSwitch">Dark Mode</label>
+    <input type="checkbox" id="themeSwitch" onclick="toggleDarkMode()" checked>
+</div>
+
+<div class="container" id="userForms">
+    <div id="formSwitcher">
+        <button onclick="showForm('login')">Login</button>
+        <button onclick="showForm('register')">Register</button>
+        <button onclick="showForm('reset')">Reset Password</button>
+    </div>
+
+    <form id="loginForm">
+        <h1>Login</h1>
+        <input type="text" id="loginUsername" placeholder="Username">
+        <input type="password" id="loginPassword" placeholder="Password">
+        <button type="button" onclick="login()">Login</button>
+        <div class="message">
+            <p>Don't have an account? <a href="#" onclick="showForm('register')">Register</a></p>
+            <p><a href="#" onclick="showForm('reset')">Forgot Password?</a></p>
+        </div>
+    </form>
+
+    <form id="registerForm" style="display:none;">
+        <h1>Register</h1>
+        <input type="text" id="registerUsername" placeholder="Username">
+        <input type="password" id="registerPassword" placeholder="Password">
+        <button type="button" onclick="register()">Register</button>
+        <div class="message">
+            <p>Already have an account? <a href="#" onclick="showForm('login')">Login</a></p>
+        </div>
+    </form>
+
+    <form id="resetForm" style="display:none;">
+        <h1>Reset Password</h1>
+        <input type="email" id="resetEmail" placeholder="Email for password reset">
+        <button type="button" onclick="resetPassword()">Reset Password</button>
+        <div class="message">
+            <p><a href="#" onclick="showForm('login')">Back to Login</a></p>
+        </div>
+    </form>
+</div>
+
+<div class="container" style="display:none;" id="todoApp">
+    <h1>Todo List</h1>
+    <input type="text" id="taskInput" placeholder="Add a new task...">
+    <button onclick="addTask()">Add Task</button>
+    <div class="table-container">
+        <table id="taskTable">
+            <thead>
+            <tr>
+                <th>Task</th>
+                <th>Created Date</th>
+                <th>Last Updated Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody id="taskList">
+            </tbody>
+        </table>
+    </div>
+    <button onclick="logout()" class="delete">Logout</button>
+</div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
