@@ -2,216 +2,197 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/fireba
 import { getDatabase, ref, set, get, child, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-database.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyClgcLeqnc0_L-xsLRSL9PEDkWa4Ysc03E",
-    authDomain: "todo-list-manager-d3048.firebaseapp.com",
-    databaseURL: "https://todo-list-manager-d3048-default-rtdb.firebaseio.com",
-    projectId: "todo-list-manager-d3048",
-    storageBucket: "todo-list-manager-d3048.appspot.com",
-    messagingSenderId: "925465173666",
-    appId: "1:925465173666:web:682e8b4d28376c8eb581fb"
+    apiKey: "AIzaSyCIbxx3LiXJymH-wrh27ClMBEdpk1pqQO4",
+    authDomain: "project-web-c0bf9.firebaseapp.com",
+    databaseURL: "https://project-web-c0bf9-default-rtdb.firebaseio.com",
+    projectId: "project-web-c0bf9",
+    storageBucket: "project-web-c0bf9.appspot.com",
+    messagingSenderId: "50274103900",
+    appId: "1:50274103900:web:1cd400f348e0cae8b1ec99"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+let currentTaskId = null;
 
-document.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.getItem("theme") === "light-mode") {
-        document.body.classList.remove("dark-mode");
-        document.body.classList.add("light-mode");
-        document.getElementById("themeSwitch").checked = false;
-    } else {
-        document.body.classList.remove("light-mode");
-        document.body.classList.add("dark-mode");
-        document.getElementById("themeSwitch").checked = true;
-    }
-});
-
-function toggleDarkMode() {
-    document.body.classList.toggle("dark-mode");
-    document.body.classList.toggle("light-mode");
-    if (document.body.classList.contains("light-mode")) {
-        localStorage.setItem("theme", "light-mode");
-    } else {
-        localStorage.setItem("theme", "dark-mode");
-    }
-}
-
-window.toggleDarkMode = toggleDarkMode;
-
-function showForm(formId) {
+window.showForm = function(formId) {
     document.querySelectorAll('form').forEach(form => {
         form.style.display = 'none';
     });
     document.getElementById(`${formId}Form`).style.display = 'block';
 }
 
-window.showForm = showForm;
+window.login = async function() {
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
 
-function register() {
-    const username = document.getElementById('registerUsername').value.trim();
-    const password = document.getElementById('registerPassword').value.trim();
-
-    if (!username || !password) {
-        alert('Please fill in all fields');
+    if (username === "" || password === "") {
+        alert("Please fill in both fields.");
         return;
     }
 
-    if (username.includes(' ')) {
-        alert('Username should not contain spaces');
-        return;
-    }
-
-    const usersRef = ref(db, 'users/' + username);
-    get(usersRef).then((snapshot) => {
+    const dbRef = ref(db);
+    try {
+        const snapshot = await get(child(dbRef, `users/${username}`));
         if (snapshot.exists()) {
-            alert('Username already exists');
-        } else {
-            set(usersRef, {
-                username: username,
-                password: password
-            }).then(() => {
-                alert('User registered successfully');
-                showForm('login');
-            }).catch((error) => {
-                console.error("Error during registration:", error);
-                alert(error.message);
-            });
-        }
-    }).catch((error) => {
-        console.error("Error during username check:", error);
-        alert(error.message);
-    });
-}
-
-window.register = register;
-
-function login() {
-    const username = document.getElementById('loginUsername').value.trim();
-    const password = document.getElementById('loginPassword').value.trim();
-
-    if (username && password) {
-        const usersRef = ref(db, 'users/' + username);
-        get(usersRef).then((snapshot) => {
-            if (snapshot.exists() && snapshot.val().password === password) {
+            const userData = snapshot.val();
+            if (userData.password === password) {
                 document.getElementById('userForms').style.display = 'none';
                 document.getElementById('todoApp').style.display = 'block';
                 loadTasks(username);
             } else {
-                alert('Invalid username or password');
+                alert("Invalid password.");
             }
-        }).catch((error) => {
-            console.error("Error during login:", error);
-            alert(error.message);
-        });
-    } else {
-        alert('Please fill in all fields');
+        } else {
+            alert("Username not found.");
+        }
+    } catch (error) {
+        console.error(error);
     }
 }
 
-window.login = login;
+window.register = async function() {
+    const username = document.getElementById('registerUsername').value;
+    const password = document.getElementById('registerPassword').value;
 
-function logout() {
+    if (username === "" || password === "") {
+        alert("Please fill in both fields.");
+        return;
+    }
+
+    const dbRef = ref(db);
+    try {
+        const snapshot = await get(child(dbRef, `users/${username}`));
+        if (snapshot.exists()) {
+            alert("Username already exists. Please choose another one.");
+        } else {
+            await set(ref(db, `users/${username}`), {
+                password: password
+            });
+            alert("User registered successfully. You can now log in.");
+            showForm('login');
+        }
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+window.resetPassword = function() {
+    alert("Password reset is not supported in this demo.");
+}
+
+window.logout = function() {
     document.getElementById('userForms').style.display = 'block';
     document.getElementById('todoApp').style.display = 'none';
 }
 
-window.logout = logout;
-
-function addTask() {
+window.addTask = function() {
     const taskInput = document.getElementById('taskInput');
     const task = taskInput.value.trim();
-    const username = document.getElementById('loginUsername').value.trim();
-
     if (task) {
+        const username = document.getElementById('loginUsername').value;
         const newTaskRef = push(ref(db, `tasks/${username}`));
-        const now = new Date().toISOString();
         set(newTaskRef, {
             task: task,
-            completed: false,
-            createdDate: now,
-            updatedDate: now
+            createdDate: new Date().toISOString(),
+            updatedDate: "N/A",
+            status: "Pending"
         });
         taskInput.value = '';
     }
 }
 
-window.addTask = addTask;
+document.getElementById('taskInput').addEventListener('input', function () {
+    const charCount = document.getElementById('taskInput').value.length;
+    document.getElementById('charCount').innerText = `${charCount}/50`;
+});
 
-function loadTasks(username) {
+document.getElementById('editTaskInput').addEventListener('input', function () {
+    const charCount = document.getElementById('editTaskInput').value.length;
+    document.getElementById('editCharCount').innerText = `${charCount}/50`;
+});
+
+window.loadTasks = function(username) {
     const tasksRef = ref(db, `tasks/${username}`);
     onValue(tasksRef, (snapshot) => {
         const taskList = document.getElementById('taskList');
         taskList.innerHTML = '';
         snapshot.forEach((childSnapshot) => {
-            const task = childSnapshot.val();
+            const taskData = childSnapshot.val();
             const tr = document.createElement('tr');
-            tr.classList.toggle('completed', task.completed);
-
-            const taskCell = document.createElement('td');
-            taskCell.textContent = task.task;
-            taskCell.className = 'task';
-            taskCell.onclick = () => toggleTaskStatus(username, childSnapshot.key, task.completed);
-
-            const createdDateCell = document.createElement('td');
-            createdDateCell.textContent = task.createdDate || 'N/A';
-
-            const updatedDateCell = document.createElement('td');
-            updatedDateCell.textContent = task.updatedDate || 'N/A';
-
-            const statusCell = document.createElement('td');
-            statusCell.textContent = task.completed ? 'Completed' : 'Pending';
-
-            const actionsCell = document.createElement('td');
-
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = 'Delete';
-            deleteBtn.className = 'small';
-            deleteBtn.onclick = () => deleteTask(username, childSnapshot.key);
-
-            actionsCell.appendChild(deleteBtn);
-
-            tr.appendChild(taskCell);
-            tr.appendChild(createdDateCell);
-            tr.appendChild(updatedDateCell);
-            tr.appendChild(statusCell);
-            tr.appendChild(actionsCell);
-
+            tr.className = taskData.status.toLowerCase(); // Set the class based on the status
+            tr.innerHTML = `
+                <td>${taskData.task}</td>
+                <td class="actions">
+                    <button class="small view" onclick="viewTask('${childSnapshot.key}')">View</button>
+                    <button class="small edit" onclick="editTask('${childSnapshot.key}', '${taskData.task}')">Edit</button>
+                    <button class="small ${taskData.status.toLowerCase()}" onclick="toggleStatus('${childSnapshot.key}', '${taskData.status}')">${taskData.status}</button>
+                    <button class="small delete" onclick="deleteTask('${childSnapshot.key}')">Delete</button>
+                </td>
+            `;
             taskList.appendChild(tr);
         });
     });
 }
 
-window.loadTasks = loadTasks;
 
-function toggleTaskStatus(username, taskId, currentStatus) {
+window.viewTask = function(taskId) {
+    const username = document.getElementById('loginUsername').value;
     const taskRef = ref(db, `tasks/${username}/${taskId}`);
-    const now = new Date().toISOString();
-    update(taskRef, {
-        completed: !currentStatus,
-        updatedDate: now
+    onValue(taskRef, (snapshot) => {
+        const taskData = snapshot.val();
+        document.getElementById('taskDetail').textContent = taskData.task;
+        document.getElementById('createdDateDetail').textContent = taskData.createdDate;
+        document.getElementById('updatedDateDetail').textContent = taskData.updatedDate;
+        document.getElementById('statusDetail').textContent = taskData.status;
+        document.getElementById('taskDetailModal').style.display = 'block';
     });
 }
 
-window.toggleTaskStatus = toggleTaskStatus;
+window.editTask = function(taskId, task) {
+    currentTaskId = taskId;
+    document.getElementById('editTaskInput').value = task;
+    document.getElementById('taskEditModal').style.display = 'block';
+}
 
-function deleteTask(username, taskId) {
+window.updateTask = function() {
+    const updatedTask = document.getElementById('editTaskInput').value.trim();
+    if (updatedTask) {
+        const username = document.getElementById('loginUsername').value;
+        const taskRef = ref(db, `tasks/${username}/${currentTaskId}`);
+        update(taskRef, {
+            task: updatedTask,
+            updatedDate: new Date().toISOString()
+        });
+        document.getElementById('taskEditModal').style.display = 'none';
+    }
+}
+
+window.closeModal = function() {
+    document.getElementById('taskDetailModal').style.display = 'none';
+}
+
+window.closeEditModal = function() {
+    document.getElementById('taskEditModal').style.display = 'none';
+}
+
+window.deleteTask = function(taskId) {
+    const username = document.getElementById('loginUsername').value;
     const taskRef = ref(db, `tasks/${username}/${taskId}`);
     remove(taskRef);
 }
 
-window.deleteTask = deleteTask;
-
-function resetPassword() {
-    const email = document.getElementById('resetEmail').value.trim();
-
-    if (email) {
-        // Replace with your Firebase Auth password reset logic
-        console.log('Password reset for:', email);
-        alert('Password reset email sent!');
-        showForm('login');
-    } else {
-        alert('Please enter your email');
-    }
+window.toggleStatus = function(taskId, currentStatus) {
+    const username = document.getElementById('loginUsername').value;
+    const newStatus = currentStatus === 'Pending' ? 'Completed' : 'Pending';
+    const taskRef = ref(db, `tasks/${username}/${taskId}`);
+    update(taskRef, {
+        status: newStatus,
+        updatedDate: new Date().toISOString()
+    });
 }
 
-window.resetPassword = resetPassword;
+window.toggleDarkMode = function() {
+    document.body.classList.toggle('light-mode');
+    document.body.classList.toggle('dark-mode');
+}
