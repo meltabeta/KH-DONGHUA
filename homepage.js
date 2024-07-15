@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const videoPlaylistElement = document.querySelector('.video-playlist');
     const pageNumberElement = document.getElementById('pageNumber');
     const headerTitle = document.querySelector('h2');
+    const sortIcon = document.getElementById('sortIcon');
     const swiperContainer = document.getElementById('swiper-container');
     const swiperWrapper = document.getElementById('swiper-wrapper');
     const swiperOverlay = document.getElementById('swiper-overlay');
@@ -29,8 +30,11 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentPage = 1;
     const itemsPerPage = 6;
     let playlists = [];
+    let videos = [];
     let filteredPlaylists = [];
+    let filteredVideos = [];
     let currentFilter = 'all';
+    let sortOrder = 'desc'; // default sort order
 
     searchBtn.addEventListener('click', function(event) {
         event.preventDefault();
@@ -46,36 +50,46 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('previousBtn').addEventListener('click', () => {
         if (currentPage > 1) {
             currentPage--;
-            displayPlaylists();
+            displayItems();
         }
     });
 
     document.getElementById('nextBtn').addEventListener('click', () => {
-        if (currentPage * itemsPerPage < filteredPlaylists.length) {
+        if (currentPage * itemsPerPage < filteredPlaylists.length || currentPage * itemsPerPage < filteredVideos.length) {
             currentPage++;
-            displayPlaylists();
+            displayItems();
         }
+    });
+
+    sortIcon.addEventListener('click', function() {
+        sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+        sortIcon.classList.toggle('desc');
+        filterPlaylists();
     });
 
     function filterPlaylists() {
         const query = searchInput.value.toLowerCase();
         filteredPlaylists = playlists.filter(playlist => {
             const matchesSearch = playlist.title.toLowerCase().includes(query);
-            const matchesFilter = currentFilter === 'all' || currentFilter === 'video' || playlist.type === currentFilter;
+            const matchesFilter = currentFilter === 'all' || playlist.type === currentFilter;
             return matchesSearch && matchesFilter;
         });
 
-        if (currentFilter === 'video') {
-            filteredPlaylists = playlists.filter(playlist => {
-                return playlist.title.toLowerCase().includes(query);
-            });
-        }
+        filteredVideos = videos.filter(video => {
+            const matchesSearch = video.videoTitle.toLowerCase().includes(query);
+            return matchesSearch;
+        });
 
-        displayPlaylists();
+        filteredVideos.sort((a, b) => {
+            const dateA = new Date(a.postingDate);
+            const dateB = new Date(b.postingDate);
+            return sortOrder === 'asc' ? dateA - dateB : dateB - dateA;
+        });
+
+        displayItems();
         displaySwiperBackground();
-        updateHeaderTitle(); // Update the header title
+        updateHeaderTitle();
     }
-
 
     function fetchPlaylists() {
         const videoPlaylistsRef = ref(database, 'videoPlaylists');
@@ -89,7 +103,20 @@ document.addEventListener('DOMContentLoaded', function() {
                 playlistTypes.add(playlist.type);
             });
             fetchAndGenerateFilterButtons();
-            fetchEpisodeCounts(); // After fetching playlists, fetch episode counts
+            fetchEpisodeCounts();
+        });
+    }
+
+    function fetchVideos() {
+        const videoDetailsRef = ref(database, 'videoDetails');
+        onValue(videoDetailsRef, (snapshot) => {
+            videos = [];
+            snapshot.forEach((childSnapshot) => {
+                const video = childSnapshot.val();
+                video.id = childSnapshot.key;
+                videos.push(video);
+            });
+            filterPlaylists();
         });
     }
 
@@ -106,30 +133,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
                 playlist.totalEpisodes = totalEpisodes;
             });
-            filterPlaylists(); // Apply initial filter and display
+            filterPlaylists();
         });
     }
 
-    function displayPlaylists() {
+    function displayItems() {
         videoPlaylistElement.innerHTML = '';
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
-        const paginatedPlaylists = filteredPlaylists.slice(startIndex, endIndex);
 
-        paginatedPlaylists.forEach((playlist, index) => {
-            const playlistItem = document.createElement('div');
-            playlistItem.classList.add('playlist-item');
-            playlistItem.style.animationDelay = `${index * 0.1}s`; // Add delay for staggered animation
-            playlistItem.innerHTML = `
-                <img src="${playlist.profile}" alt="${playlist.title}">
-                <h3>${playlist.title}</h3>
-                <p>Total Episodes: ${playlist.totalEpisodes}</p>
-            `;
-            playlistItem.addEventListener('click', () => {
-                window.location.href = `videoPlayer.html?playlistId=${playlist.id}`;
+        if (currentFilter === 'video') {
+            const paginatedVideos = filteredVideos.slice(startIndex, endIndex);
+            paginatedVideos.forEach((video, index) => {
+                const videoItem = document.createElement('div');
+                videoItem.classList.add('playlist-item');
+                videoItem.style.animationDelay = `${index * 0.1}s`;
+                videoItem.innerHTML = `
+                    <img src="${video.videoProfile}" alt="${video.videoTitle}">
+                    <h3>${video.videoTitle}</h3>
+                    <p>Episode: ${video.videoEpisode}</p>
+                `;
+                videoItem.addEventListener('click', () => {
+                    window.location.href = `videoPlayer.html?videoId=${video.id}`;
+                });
+                videoPlaylistElement.appendChild(videoItem);
             });
-            videoPlaylistElement.appendChild(playlistItem);
-        });
+        } else {
+            const paginatedPlaylists = filteredPlaylists.slice(startIndex, endIndex);
+            paginatedPlaylists.forEach((playlist, index) => {
+                const playlistItem = document.createElement('div');
+                playlistItem.classList.add('playlist-item');
+                playlistItem.style.animationDelay = `${index * 0.1}s`;
+                playlistItem.innerHTML = `
+                    <img src="${playlist.profile}" alt="${playlist.title}">
+                    <h3>${playlist.title}</h3>
+                    <p>Total Episodes: ${playlist.totalEpisodes}</p>
+                `;
+                playlistItem.addEventListener('click', () => {
+                    window.location.href = `videoPlayer.html?playlistId=${playlist.id}`;
+                });
+                videoPlaylistElement.appendChild(playlistItem);
+            });
+        }
 
         pageNumberElement.textContent = currentPage;
     }
@@ -137,7 +182,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function displaySwiperBackground() {
         let currentIndex = 0;
         function changeBackground() {
-            if (filteredPlaylists.length > 0) {
+            if (currentFilter === 'video' && filteredVideos.length > 0) {
+                const video = filteredVideos[currentIndex];
+                swiperContainer.style.backgroundImage = `url(${video.videoProfile})`;
+                swiperTitle.textContent = video.videoTitle;
+                swiperOverlay.onclick = () => {
+                    window.location.href = `videoPlayer.html?videoId=${video.id}`;
+                };
+                currentIndex = (currentIndex + 1) % filteredVideos.length;
+            } else if (filteredPlaylists.length > 0) {
                 const playlist = filteredPlaylists[currentIndex];
                 swiperContainer.style.backgroundImage = `url(${playlist.profile})`;
                 swiperTitle.textContent = playlist.title;
@@ -148,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         changeBackground();
-        setInterval(changeBackground, 5000); // Change background every 3 seconds
+        setInterval(changeBackground, 3000);
     }
 
     function fetchAndGenerateFilterButtons() {
@@ -210,9 +263,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-
-    // Initial fetch and display of playlists and types
+    // Initial fetch and display of playlists, types, and videos
     fetchPlaylists();
+    fetchVideos();
 
     // Enable dragging for Swiper images
     let isDragging = false;

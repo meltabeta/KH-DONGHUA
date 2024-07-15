@@ -482,3 +482,14 @@ main {
         width: 100%;
     }
 }
+
+#sortIcon {
+    margin-left: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+#sortIcon.desc {
+    transform: rotate(180deg);
+}
