@@ -1,6 +1,6 @@
 /* Base styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     background-color: #121212;
     color: #e0e0e0;
     margin: 0;
@@ -19,31 +19,6 @@ header {
     transition: background-color 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
-}
-
-.header-clock {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-}
-
-.digital-clock {
-    text-align: center;
-    color: #00ffcc;
-    font-family: 'Roboto Mono', monospace;
-    text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc;
-}
-
-.digital-clock .date {
-    font-size: 14px;
-    margin-bottom: 5px;
-}
-
-.digital-clock .time {
-    font-size: 24px;
 }
 
 header img {
@@ -65,17 +40,18 @@ header h1 {
 
 .nav-container a {
     display: inline-block;
-    padding: 10px 20px;
+    padding: 5px 10px; /* Reduced padding */
     color: #fff;
-    background-color: #007BFF;
+    background-color: #ff0000; /* Red background */
     border-radius: 5px;
     text-decoration: none;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75em; /* Reduced font size */
     transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .nav-container a:hover {
-    background-color: #0056b3;
+    background-color: #cc0000; /* Darker red on hover */
     transform: scale(1.05);
 }
 
@@ -140,6 +116,7 @@ main {
     background-color: #007BFF;
     color: #fff;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .pagination button:hover {
@@ -191,72 +168,23 @@ main {
     }
 }
 
-/* Additional styles for clock */
-#clock-container {
-    text-align: center;
-    padding: 20px;
-    background-color: #333;
-    color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    margin-bottom: 20px;
-    border-radius: 8px;
-    animation: fadeIn 1s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
 /* Styles for welcome and credit messages */
 .welcome-message {
     text-align: center;
     margin-top: 20px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 1.2em;
     color: #ccc;
-    animation: slideInDown 1s ease-out;
 }
 
 .credit-message {
     text-align: center;
     margin-top: 10px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 0.8em;
     color: #999;
-    animation: fadeInUp 1s ease-out;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
-@keyframes slideInDown {
-    0% {
-        opacity: 0;
-        transform: translateY(-50px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Filter buttons styles */
 .filter-bar {
     text-align: center;
     margin-top: 20px;
@@ -265,7 +193,7 @@ main {
 .filter-bar button {
     margin: 0 5px;
     padding: 10px 20px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 1em;
     cursor: pointer;
     background-color: #fff;
@@ -287,18 +215,88 @@ main {
     transform: translateY(1px);
 }
 
+.pagination button {
+    margin: 0 5px;
+    padding: 10px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #fff;
+    color: black; /* Set text color to black */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.pagination button:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+.pagination button:active {
+    background-color: #ddd;
+    box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+}
+
+/* Styles for the pop-up */
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    position: relative;
+}
+
+.popup-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.close-popup {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff6347;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 /* Swiper container styles */
 .swiper-container {
     width: 100%;
-    height: 300px;
+    height: 150px; /* Reduced height */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
     position: relative;
+    border: 2px solid #ccc; /* Border around the Swiper */
+    border-radius: 10px; /* Optional: rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: shadow for better visibility */
 }
 
 .swiper-slide {
-    display: none;
+    display: none; /* Hide slides */
 }
 
 .swiper-overlay {
@@ -310,14 +308,14 @@ main {
     text-align: center;
     background: rgba(0, 0, 0, 0.5);
     padding: 10px;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 1.2em;
     cursor: pointer;
 }
 
 .swiper-title {
     text-align: center;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     font-size: 1.5em;
     color: #fff;
     margin-top: 10px;
@@ -338,6 +336,7 @@ main {
     border-radius: 5px;
     background: #333;
     color: #fff;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .search-container button {
@@ -348,11 +347,12 @@ main {
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-right: 5px;
+    margin-right: 5px; /* Add margin to the button */
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .search-container button:last-child {
-    margin-right: 0;
+    margin-right: 0; /* Remove margin from the last button */
 }
 
 .search-container button:hover {
@@ -410,12 +410,6 @@ main {
         top: auto;
         bottom: 10px;
         right: 10px;
-    }
-
-    .header-clock {
-        position: static;
-        transform: translateY(0);
-        margin-bottom: 10px;
     }
 }
 
@@ -477,7 +471,7 @@ main {
     }
 
     .swiper-container {
-        height: 200px;
+        height: 100px; /* Reduced height for smaller screens */
     }
 
     .swiper-title {
@@ -486,11 +480,5 @@ main {
 
     .search-container input {
         width: 100%;
-    }
-
-    .header-clock {
-        position: static;
-        transform: translateY(0);
-        margin-bottom: 10px;
     }
 }

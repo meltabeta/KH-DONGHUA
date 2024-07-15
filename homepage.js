@@ -18,11 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
     const clearBtn = document.getElementById('clearBtn');
-    const filterAllBtn = document.getElementById('filterAllBtn');
-    const filterAnimeBtn = document.getElementById('filterAnimeBtn');
-    const filterDonghuaBtn = document.getElementById('filterDonghuaBtn');
+    const filterBar = document.getElementById('filterBar');
     const videoPlaylistElement = document.querySelector('.video-playlist');
     const pageNumberElement = document.getElementById('pageNumber');
+    const headerTitle = document.querySelector('h2');
     const swiperContainer = document.getElementById('swiper-container');
     const swiperWrapper = document.getElementById('swiper-wrapper');
     const swiperOverlay = document.getElementById('swiper-overlay');
@@ -44,21 +43,6 @@ document.addEventListener('DOMContentLoaded', function() {
         filterPlaylists();
     });
 
-    filterAllBtn.addEventListener('click', function() {
-        currentFilter = 'all';
-        filterPlaylists();
-    });
-
-    filterAnimeBtn.addEventListener('click', function() {
-        currentFilter = 'Anime';
-        filterPlaylists();
-    });
-
-    filterDonghuaBtn.addEventListener('click', function() {
-        currentFilter = 'Donghua';
-        filterPlaylists();
-    });
-
     document.getElementById('previousBtn').addEventListener('click', () => {
         if (currentPage > 1) {
             currentPage--;
@@ -77,22 +61,34 @@ document.addEventListener('DOMContentLoaded', function() {
         const query = searchInput.value.toLowerCase();
         filteredPlaylists = playlists.filter(playlist => {
             const matchesSearch = playlist.title.toLowerCase().includes(query);
-            const matchesFilter = currentFilter === 'all' || playlist.type === currentFilter;
+            const matchesFilter = currentFilter === 'all' || currentFilter === 'video' || playlist.type === currentFilter;
             return matchesSearch && matchesFilter;
         });
+
+        if (currentFilter === 'video') {
+            filteredPlaylists = playlists.filter(playlist => {
+                return playlist.title.toLowerCase().includes(query);
+            });
+        }
+
         displayPlaylists();
         displaySwiperBackground();
+        updateHeaderTitle(); // Update the header title
     }
+
 
     function fetchPlaylists() {
         const videoPlaylistsRef = ref(database, 'videoPlaylists');
         onValue(videoPlaylistsRef, (snapshot) => {
             playlists = [];
+            const playlistTypes = new Set();
             snapshot.forEach((childSnapshot) => {
                 const playlist = childSnapshot.val();
                 playlist.id = childSnapshot.key;
                 playlists.push(playlist);
+                playlistTypes.add(playlist.type);
             });
+            fetchAndGenerateFilterButtons();
             fetchEpisodeCounts(); // After fetching playlists, fetch episode counts
         });
     }
@@ -152,10 +148,137 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
         changeBackground();
-        setInterval(changeBackground, 3000); // Change background every 3 seconds
+        setInterval(changeBackground, 5000); // Change background every 3 seconds
     }
 
-    // Initial fetch and display of playlists
+    function fetchAndGenerateFilterButtons() {
+        const typesRef = ref(database, 'playlistTypes');
+        onValue(typesRef, (snapshot) => {
+            const playlistTypes = new Set();
+            snapshot.forEach((childSnapshot) => {
+                const type = childSnapshot.val().name;
+                if (type) {
+                    playlistTypes.add(type);
+                }
+            });
+            generateFilterButtons(playlistTypes);
+        });
+    }
+
+    function generateFilterButtons(playlistTypes) {
+        filterBar.innerHTML = ''; // Clear existing buttons
+
+        const allBtn = document.createElement('button');
+        allBtn.id = 'filterAllBtn';
+        allBtn.textContent = 'Home';
+        allBtn.addEventListener('click', function() {
+            currentFilter = 'all';
+            filterPlaylists();
+        });
+        filterBar.appendChild(allBtn);
+
+        const videoBtn = document.createElement('button');
+        videoBtn.id = 'filterVideoBtn';
+        videoBtn.textContent = 'Video';
+        videoBtn.addEventListener('click', function() {
+            currentFilter = 'video';
+            filterPlaylists();
+        });
+        filterBar.appendChild(videoBtn);
+
+        playlistTypes.forEach(type => {
+            if (type) { // Check if type is not null or undefined
+                const btn = document.createElement('button');
+                btn.id = `filter${type}Btn`;
+                btn.textContent = type;
+                btn.addEventListener('click', function() {
+                    currentFilter = type;
+                    filterPlaylists();
+                });
+                filterBar.appendChild(btn);
+            }
+        });
+    }
+
+    function updateHeaderTitle() {
+        if (currentFilter === 'all') {
+            headerTitle.textContent = 'Home';
+        } else if (currentFilter === 'video') {
+            headerTitle.textContent = 'Video';
+        } else {
+            headerTitle.textContent = currentFilter;
+        }
+    }
+
+
+    // Initial fetch and display of playlists and types
     fetchPlaylists();
 
+    // Enable dragging for Swiper images
+    let isDragging = false;
+    let startY;
+    let scrollTop;
+
+    swiperContainer.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startY = e.pageY - swiperContainer.offsetTop;
+        scrollTop = swiperContainer.scrollTop;
+        swiperContainer.style.cursor = 'grabbing';
+    });
+
+    swiperContainer.addEventListener('mouseleave', () => {
+        isDragging = false;
+        swiperContainer.style.cursor = 'grab';
+    });
+
+    swiperContainer.addEventListener('mouseup', () => {
+        isDragging = false;
+        swiperContainer.style.cursor = 'grab';
+    });
+
+    swiperContainer.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const y = e.pageY - swiperContainer.offsetTop;
+        const walk = (y - startY) * 1.5; // scroll-fast
+        swiperContainer.scrollTop = scrollTop - walk;
+    });
+
+    swiperContainer.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startY = e.touches[0].pageY - swiperContainer.offsetTop;
+        scrollTop = swiperContainer.scrollTop;
+    });
+
+    swiperContainer.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+
+    swiperContainer.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const y = e.touches[0].pageY - swiperContainer.offsetTop;
+        const walk = (y - startY) * 1.5; // scroll-fast
+        swiperContainer.scrollTop = scrollTop - walk;
+    });
+
+    // Pop-up functionality
+    const donateLink = document.getElementById('donateLink');
+    const donatePopup = document.getElementById('donatePopup');
+    const closePopup = document.getElementById('closePopup');
+
+    donateLink.addEventListener('click', (event) => {
+        event.preventDefault();
+        donatePopup.style.display = 'flex';
+    });
+
+    closePopup.addEventListener('click', () => {
+        donatePopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === donatePopup) {
+            donatePopup.style.display = 'none';
+        }
+    });
 });

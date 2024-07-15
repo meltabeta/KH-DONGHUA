@@ -2,13 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBdVgeMqQKtuJEQxrPFz8xB7XmUN6cFlMQ",
-    authDomain: "kh-donghua.firebaseapp.com",
-    databaseURL: "https://kh-donghua-default-rtdb.firebaseio.com",
-    projectId: "kh-donghua",
-    storageBucket: "kh-donghua.appspot.com",
-    messagingSenderId: "119897892431",
-    appId: "1:119897892431:web:ad31196e8a9692b63e6c3a"
+    apiKey: "AIzaSyCIbxx3LiXJymH-wrh27ClMBEdpk1pqQO4",
+    authDomain: "project-web-c0bf9.firebaseapp.com",
+    databaseURL: "https://project-web-c0bf9-default-rtdb.firebaseio.com",
+    projectId: "project-web-c0bf9",
+    storageBucket: "project-web-c0bf9.appspot.com",
+    messagingSenderId: "50274103900",
+    appId: "1:50274103900:web:1cd400f348e0cae8b1ec99"
 };
 
 const app = initializeApp(firebaseConfig);
