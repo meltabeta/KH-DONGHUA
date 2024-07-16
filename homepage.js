@@ -25,8 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const sortIcon = document.getElementById('sortIcon');
     const swiperContainer = document.getElementById('swiper-container');
     const swiperWrapper = document.getElementById('swiper-wrapper');
-    const swiperOverlay = document.getElementById('swiper-overlay');
-    const swiperTitle = document.getElementById('swiper-title');
     let currentPage = 1;
     const itemsPerPage = 6;
     let playlists = [];
@@ -87,7 +85,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         displayItems();
-        displaySwiperBackground();
         updateHeaderTitle();
     }
 
@@ -180,28 +177,51 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function displaySwiperBackground() {
-        let currentIndex = 0;
-        function changeBackground() {
-            if (currentFilter === 'video' && filteredVideos.length > 0) {
-                const video = filteredVideos[currentIndex];
-                swiperContainer.style.backgroundImage = `url(${video.videoProfile})`;
-                swiperTitle.textContent = video.videoTitle;
-                swiperOverlay.onclick = () => {
-                    window.location.href = `videoPlayer.html?videoId=${video.id}`;
-                };
-                currentIndex = (currentIndex + 1) % filteredVideos.length;
-            } else if (filteredPlaylists.length > 0) {
-                const playlist = filteredPlaylists[currentIndex];
-                swiperContainer.style.backgroundImage = `url(${playlist.profile})`;
-                swiperTitle.textContent = playlist.title;
-                swiperOverlay.onclick = () => {
-                    window.location.href = `videoPlayer.html?playlistId=${playlist.id}`;
-                };
-                currentIndex = (currentIndex + 1) % filteredPlaylists.length;
-            }
-        }
-        changeBackground();
-        setInterval(changeBackground, 3000);
+        const slidesRef = ref(database, 'slides');
+        onValue(slidesRef, (snapshot) => {
+            swiperWrapper.innerHTML = ''; // Clear existing slides
+            snapshot.forEach((childSnapshot) => {
+                const slide = childSnapshot.val();
+                const slideElement = document.createElement('div');
+                slideElement.classList.add('swiper-slide');
+                slideElement.style.backgroundImage = `url(${slide.imageUrl})`;
+                slideElement.style.backgroundSize = 'cover'; // Ensure the image covers the slide
+                slideElement.style.overflow = 'auto'; // Allow scrolling within the slide
+
+                const titleElement = document.createElement('div');
+                titleElement.classList.add('swiper-title');
+                titleElement.textContent = slide.title;
+
+                slideElement.appendChild(titleElement);
+                swiperWrapper.appendChild(slideElement);
+            });
+
+            // Re-initialize Swiper to recognize new slides
+            const swiper = new Swiper('.swiper-container', {
+                loop: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+                autoplay: {
+                    delay: 5000, // 5 seconds delay
+                    disableOnInteraction: false,
+                },
+            });
+
+            // Pause autoplay on mouse enter, resume on mouse leave
+            swiperContainer.addEventListener('mouseenter', () => {
+                swiper.autoplay.stop();
+            });
+
+            swiperContainer.addEventListener('mouseleave', () => {
+                swiper.autoplay.start();
+            });
+        });
     }
 
     function fetchAndGenerateFilterButtons() {
@@ -266,6 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial fetch and display of playlists, types, and videos
     fetchPlaylists();
     fetchVideos();
+    displaySwiperBackground();
 
     // Enable dragging for Swiper images
     let isDragging = false;

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<!--index.html (user interface)-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KH-Donghua</title>
+    <title>KH-DONGHUA</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30">
     <script type="module" src="homepage.js" defer></script>
@@ -22,14 +21,11 @@
     <!-- Add Navigation -->
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
-    <!-- Overlay for playlist name -->
-    <div class="swiper-overlay" id="swiper-overlay"></div>
 </div>
-<div class="swiper-title" id="swiper-title"></div>
 
 <header>
     <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-Donghua Logo">
-    <h1>KH-Donghua</h1>
+    <h1>KH-DONGHUA</h1>
     <div class="nav-container">
         <a href="#" id="donateLink">Donate me!</a>
     </div>
@@ -39,7 +35,9 @@
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search by video title...">
         <button id="searchBtn">Search</button>
-        <button id="clearBtn">Clear</button>
+        <button id="clearBtn">
+            <span class="cross-icon">&#10005;</span>
+        </button>
     </div>
 
     <div class="welcome-message">Welcome to my website!<br></div>
@@ -103,9 +101,18 @@
             prevEl: '.swiper-button-prev',
         },
         autoplay: {
-            delay: 3000, // 3 seconds delay
+            delay: 5000, // 5 seconds delay
             disableOnInteraction: false,
         },
+    });
+
+    // Pause autoplay on mouse enter, resume on mouse leave
+    swiperContainer.addEventListener('mouseenter', () => {
+        swiper.autoplay.stop();
+    });
+
+    swiperContainer.addEventListener('mouseleave', () => {
+        swiper.autoplay.start();
     });
 </script>
 </body>
