@@ -1,6 +1,6 @@
 /* General Body Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'JetBrains Mono', monospace;
     background-color: #121212; /* Default dark mode background */
     color: #ccc; /* Default dark mode text color */
     transition: background-color 0.3s, color 0.3s;

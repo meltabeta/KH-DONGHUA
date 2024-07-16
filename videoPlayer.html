@@ -9,7 +9,7 @@
     <script type="module" src="videoPlayer.js" defer></script>
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
+            font-family: 'JetBrains Mono', monospace;
             background-color: #121212;
             color: #e0e0e0;
             margin: 0;
@@ -123,11 +123,13 @@
             margin: 10px 0;
         }
 
-        .episode-dropdown-container {
+        .controls-container {
             display: flex;
-            justify-content: center;
-            margin: 20px 0;
+            justify-content: space-between;
+            align-items: center;
             width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
         }
 
         .episode-dropdown {
@@ -177,21 +179,22 @@
         }
 
         .episode-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
             width: 100%;
+            gap: 10px;
+            margin-top: 20px;
             opacity: 0;
             animation: fadeInUp 0.5s ease forwards;
         }
 
         .episode-item {
+            display: flex;
+            align-items: center;
             background-color: #252525;
             padding: 1em;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            text-align: center;
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
@@ -202,18 +205,25 @@
         }
 
         .episode-item img {
-            max-width: 100%;
+            max-width: 80px;
             border-radius: 4px;
+            margin-right: 20px;
         }
 
-        .episode-item h3 {
-            margin: 0.5em 0 0;
+        .episode-item .episode-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .episode-item .episode-number {
+            font-size: 1em;
             color: #fff;
+            margin-bottom: 5px;
         }
 
-        .episode-item p {
-            margin: 0.5em 0 0;
-            color: #bbb;
+        .episode-item .episode-title {
+            font-size: 1.2em;
+            color: #fff;
         }
 
         footer {
@@ -267,17 +277,6 @@
             }
         }
 
-        @keyframes fadeInList {
-            0% {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
         /* Media queries for responsiveness */
         @media (max-width: 768px) {
             main {
@@ -293,8 +292,15 @@
                 width: 100%;
             }
 
-            .episode-list {
-                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            .controls-container {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .back-button,
+            .episode-dropdown {
+                flex: 1;
+                margin: 5px;
             }
         }
 
@@ -312,34 +318,25 @@
                 font-size: 0.9em;
             }
 
-            .episode-list {
-                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-                gap: 10px;
+            .episode-item img {
+                max-width: 60px;
+                margin-right: 10px;
             }
 
-            .episode-item {
-                padding: 0.5em;
-            }
-
-            .episode-item h3 {
+            .episode-item .episode-number,
+            .episode-item .episode-title {
                 font-size: 0.9em;
             }
 
-            .episode-item p {
-                font-size: 0.8em;
-            }
-
-            .back-button {
-                width: 100%;
-                text-align: center;
-                margin-bottom: 10px;
-            }
-
+            .back-button,
             .episode-dropdown {
-                margin-bottom: 10px;
+                width: 100%;
+                margin: 5px 0;
             }
         }
     </style>
+
+
 </head>
 <body>
 <header>
@@ -355,13 +352,13 @@
     </div>
 </header>
 <main>
-    <a href="index.html" class="back-button">Back</a>
+    <div class="controls-container">
+        <a href="index.html" class="back-button">Back</a>
+        <select id="episodeDropdown" class="episode-dropdown">
+            <!-- Episodes will be dynamically generated here -->
+        </select>
+    </div>
     <div class="video-container">
-        <div class="episode-dropdown-container">
-            <select id="episodeDropdown" class="episode-dropdown">
-                <!-- Episodes will be dynamically generated here -->
-            </select>
-        </div>
         <div class="video-placeholder"></div> <!-- Placeholder for iframe -->
         <div class="video-info">
             <h2 id="videoTitle">Now you're watching: Episode 1</h2>
@@ -376,6 +373,7 @@
         <br>
     </div>
 </main>
+
 <footer>
     <div class="credit-message">This website built by <span style="font-family: 'Meta Beta', sans-serif;">SEANG SENGLY</span></div>
 </footer>

@@ -19,11 +19,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchBtn = document.getElementById('searchBtn');
     const clearBtn = document.getElementById('clearBtn');
     const filterBar = document.getElementById('filterBar');
-    const videoPlaylistElement = document.querySelector('.video-playlist');
-    const pageNumberElement = document.getElementById('pageNumber');
-    const headerTitle = document.querySelector('h2');
+    const sortOrderBtn = document.getElementById('sortOrderBtn');
     const sortIcon = document.getElementById('sortIcon');
-    const swiperContainer = document.getElementById('swiper-container');
+    const videoPlaylistElement = document.querySelector('.video-playlist');
+    const headerTitle = document.querySelector('h2');
+    const swiperContainer = document.getElementById('swiper-container'); // Ensure this is defined correctly
     const swiperWrapper = document.getElementById('swiper-wrapper');
     let currentPage = 1;
     const itemsPerPage = 6;
@@ -45,23 +45,9 @@ document.addEventListener('DOMContentLoaded', function() {
         filterPlaylists();
     });
 
-    document.getElementById('previousBtn').addEventListener('click', () => {
-        if (currentPage > 1) {
-            currentPage--;
-            displayItems();
-        }
-    });
-
-    document.getElementById('nextBtn').addEventListener('click', () => {
-        if (currentPage * itemsPerPage < filteredPlaylists.length || currentPage * itemsPerPage < filteredVideos.length) {
-            currentPage++;
-            displayItems();
-        }
-    });
-
-    sortIcon.addEventListener('click', function() {
-        sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-        sortIcon.classList.toggle('desc');
+    sortOrderBtn.addEventListener('click', function(event) {
+        event.preventDefault();
+        toggleSortOrder();
         filterPlaylists();
     });
 
@@ -140,31 +126,34 @@ document.addEventListener('DOMContentLoaded', function() {
         const endIndex = startIndex + itemsPerPage;
 
         if (currentFilter === 'video') {
-            const paginatedVideos = filteredVideos.slice(startIndex, endIndex);
-            paginatedVideos.forEach((video, index) => {
+            filteredVideos.slice(0, endIndex).forEach(video => {
                 const videoItem = document.createElement('div');
                 videoItem.classList.add('playlist-item');
-                videoItem.style.animationDelay = `${index * 0.1}s`;
                 videoItem.innerHTML = `
                     <img src="${video.videoProfile}" alt="${video.videoTitle}">
-                    <h3>${video.videoTitle}</h3>
-                    <p>Episode: ${video.videoEpisode}</p>
+                    <div class="playlist-info">
+                        <h3>${video.videoTitle}</h3>
+                        <p>Episode: ${video.videoEpisode}</p>
+                    </div>
                 `;
                 videoItem.addEventListener('click', () => {
-                    window.location.href = `videoPlayer.html?videoId=${video.id}`;
+                    const associatedPlaylist = playlists.find(playlist => playlist.id === video.playList);
+                    if (associatedPlaylist) {
+                        window.location.href = `videoPlayer.html?playlistId=${associatedPlaylist.id}&episode=${video.videoEpisode}`;
+                    }
                 });
                 videoPlaylistElement.appendChild(videoItem);
             });
         } else {
-            const paginatedPlaylists = filteredPlaylists.slice(startIndex, endIndex);
-            paginatedPlaylists.forEach((playlist, index) => {
+            filteredPlaylists.slice(0, endIndex).forEach(playlist => {
                 const playlistItem = document.createElement('div');
                 playlistItem.classList.add('playlist-item');
-                playlistItem.style.animationDelay = `${index * 0.1}s`;
                 playlistItem.innerHTML = `
                     <img src="${playlist.profile}" alt="${playlist.title}">
-                    <h3>${playlist.title}</h3>
-                    <p>Total Episodes: ${playlist.totalEpisodes}</p>
+                    <div class="playlist-info">
+                        <h3>${playlist.title}</h3>
+                        <p>Total Episodes: ${playlist.totalEpisodes}</p>
+                    </div>
                 `;
                 playlistItem.addEventListener('click', () => {
                     window.location.href = `videoPlayer.html?playlistId=${playlist.id}`;
@@ -172,8 +161,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 videoPlaylistElement.appendChild(playlistItem);
             });
         }
-
-        pageNumberElement.textContent = currentPage;
     }
 
     function displaySwiperBackground() {
@@ -198,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Re-initialize Swiper to recognize new slides
             const swiper = new Swiper('.swiper-container', {
-                loop: true,
+                loop: snapshot.size > 1, // Only loop if more than one slide
                 pagination: {
                     el: '.swiper-pagination',
                     clickable: true,
@@ -273,6 +260,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function toggleSortOrder() {
+        sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+        sortIcon.textContent = sortOrder === 'asc' ? '▲' : '▼';
+    }
+
     function updateHeaderTitle() {
         if (currentFilter === 'all') {
             headerTitle.textContent = 'Home';
@@ -336,23 +328,17 @@ document.addEventListener('DOMContentLoaded', function() {
         swiperContainer.scrollTop = scrollTop - walk;
     });
 
-    // Pop-up functionality
-    const donateLink = document.getElementById('donateLink');
-    const donatePopup = document.getElementById('donatePopup');
-    const closePopup = document.getElementById('closePopup');
-
-    donateLink.addEventListener('click', (event) => {
-        event.preventDefault();
-        donatePopup.style.display = 'flex';
-    });
-
-    closePopup.addEventListener('click', () => {
-        donatePopup.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === donatePopup) {
-            donatePopup.style.display = 'none';
+    window.addEventListener('scroll', () => {
+        if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+            loadMoreItems();
         }
     });
+
+    function loadMoreItems() {
+        const currentLength = currentFilter === 'video' ? filteredVideos.length : filteredPlaylists.length;
+        if ((currentPage - 1) * itemsPerPage < currentLength) {
+            currentPage++;
+            displayItems();
+        }
+    }
 });

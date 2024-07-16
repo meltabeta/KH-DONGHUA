@@ -2,21 +2,21 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBdVgeMqQKtuJEQxrPFz8xB7XmUN6cFlMQ",
-  authDomain: "kh-donghua.firebaseapp.com",
-  databaseURL: "https://kh-donghua-default-rtdb.firebaseio.com",
-  projectId: "kh-donghua",
-  storageBucket: "kh-donghua.appspot.com",
-  messagingSenderId: "119897892431",
-  appId: "1:119897892431:web:ad31196e8a9692b63e6c3a"
+    apiKey: "AIzaSyBdVgeMqQKtuJEQxrPFz8xB7XmUN6cFlMQ",
+    authDomain: "kh-donghua.firebaseapp.com",
+    databaseURL: "https://kh-donghua-default-rtdb.firebaseio.com",
+    projectId: "kh-donghua",
+    storageBucket: "kh-donghua.appspot.com",
+    messagingSenderId: "119897892431",
+    appId: "1:119897892431:web:ad31196e8a9692b63e6c3a"
 };
-
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 document.addEventListener('DOMContentLoaded', function() {
     const urlParams = new URLSearchParams(window.location.search);
     const playlistId = urlParams.get('playlistId');
+    const episodeNumber = parseInt(urlParams.get('episode'), 10) || 1; // Default to 1 if no episode parameter
     const videoContainer = document.querySelector('.video-container');
     const videoInfo = document.querySelector('.video-info');
     const videoTitle = document.getElementById('videoTitle');
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     episodes.push(video);
                     const episodeOption = document.createElement('option');
                     episodeOption.value = episodes.length - 1;
-                    episodeOption.textContent = `Episode ${video.videoEpisode}: ${video.videoTitle}`;
+                    episodeOption.textContent = `Episode ${video.videoEpisode}`;
                     episodeDropdown.appendChild(episodeOption);
                 }
             });
@@ -52,10 +52,17 @@ document.addEventListener('DOMContentLoaded', function() {
             // Sort episodes by episode number
             episodes.sort((a, b) => a.videoEpisode - b.videoEpisode);
 
-            // Play the first episode by default
-            if (episodes.length > 0) {
+            // Find the episode index based on the episode number from the URL
+            currentEpisodeIndex = episodes.findIndex(episode => episode.videoEpisode === episodeNumber);
+
+            // Default to the first episode if the specified episode is not found
+            if (currentEpisodeIndex === -1) {
                 currentEpisodeIndex = 0;
-                displayVideo(episodes[0]);
+            }
+
+            // Play the specified episode by default
+            if (episodes.length > 0) {
+                displayVideo(episodes[currentEpisodeIndex]);
             }
             renderEpisodes();
             renderPaginationControls();
@@ -67,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const iframe = document.createElement('div');
         iframe.innerHTML = video.videoLink;
         videoContainer.insertBefore(iframe.firstChild, videoInfo);
-        videoTitle.textContent = `Now you're watching: ${video.videoTitle}`;
+        videoTitle.textContent = `Now you're watching: Episode ${video.videoEpisode}`;
         episodeDropdown.value = currentEpisodeIndex; // Update dropdown selection
         updateButtonState();
     }
@@ -105,9 +112,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const episodeItem = document.createElement('div');
             episodeItem.classList.add('episode-item');
             episodeItem.innerHTML = `
-                <img src="${video.videoProfile}" alt="${video.videoTitle}">
-                <h3>${video.videoTitle}</h3>
-                <p>Episode ${video.videoEpisode}</p>
+                <img src="${video.videoProfile}" alt="Episode ${video.videoEpisode}" loading="lazy">
+                <div class="episode-details">
+                    <span class="episode-number">Episode ${video.videoEpisode}</span>
+                    <span class="episode-title">${video.videoTitle}</span>
+                </div>
             `;
             episodeItem.addEventListener('click', () => {
                 currentEpisodeIndex = i;
