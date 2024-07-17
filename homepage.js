@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const sortIcon = document.getElementById('sortIcon');
     const videoPlaylistElement = document.querySelector('.video-playlist');
     const headerTitle = document.querySelector('h2');
-    const swiperContainer = document.getElementById('swiper-container'); // Ensure this is defined correctly
+    const swiperContainer = document.getElementById('swiper-container');
     const swiperWrapper = document.getElementById('swiper-wrapper');
     let currentPage = 1;
     const itemsPerPage = 6;
@@ -231,18 +231,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const allBtn = document.createElement('button');
         allBtn.id = 'filterAllBtn';
         allBtn.textContent = 'Home';
+        allBtn.classList.add('filter-btn');
         allBtn.addEventListener('click', function() {
             currentFilter = 'all';
             filterPlaylists();
+            setActiveButton(allBtn);
         });
         filterBar.appendChild(allBtn);
 
         const videoBtn = document.createElement('button');
         videoBtn.id = 'filterVideoBtn';
         videoBtn.textContent = 'Video';
+        videoBtn.classList.add('filter-btn');
         videoBtn.addEventListener('click', function() {
             currentFilter = 'video';
             filterPlaylists();
+            setActiveButton(videoBtn);
         });
         filterBar.appendChild(videoBtn);
 
@@ -251,9 +255,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 const btn = document.createElement('button');
                 btn.id = `filter${type}Btn`;
                 btn.textContent = type;
+                btn.classList.add('filter-btn');
                 btn.addEventListener('click', function() {
                     currentFilter = type;
                     filterPlaylists();
+                    setActiveButton(btn);
                 });
                 filterBar.appendChild(btn);
             }
@@ -273,6 +279,14 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
             headerTitle.textContent = currentFilter;
         }
+    }
+
+    function setActiveButton(activeBtn) {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        filterButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+        activeBtn.classList.add('active');
     }
 
     // Initial fetch and display of playlists, types, and videos

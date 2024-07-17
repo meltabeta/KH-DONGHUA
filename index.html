@@ -10,26 +10,32 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 </head>
-<body>
-<!-- Carousel -->
-<div class="swiper-container" id="swiper-container">
-    <div class="swiper-wrapper" id="swiper-wrapper">
-        <!-- Slides will be added here dynamically -->
+<body onload="showTime()">
+<div class="container">
+    <!-- Carousel -->
+    <div class="swiper-container" id="swiper-container">
+        <div class="swiper-wrapper" id="swiper-wrapper">
+            <!-- Slides will be added here dynamically -->
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+        <!-- Add Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
     </div>
-    <!-- Add Pagination -->
-    <div class="swiper-pagination"></div>
-    <!-- Add Navigation -->
-    <div class="swiper-button-next"></div>
-    <div class="swiper-button-prev"></div>
+
+    <header>
+        <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-Donghua Logo">
+        <h1>KH-DONGHUA</h1>
+        <div class="nav-container">
+            <a href="#" id="donateLink">Donate me!</a>
+        </div>
+    </header>
+
+    <!-- Digital Clock -->
+    <div id="MyClockDisplay" class="clock"></div>
 </div>
 
-<header>
-    <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-Donghua Logo">
-    <h1>KH-DONGHUA</h1>
-    <div class="nav-container">
-        <a href="#" id="donateLink">Donate me!</a>
-    </div>
-</header>
 <main>
     <!-- Search Container -->
     <div class="search-container">
@@ -40,7 +46,7 @@
         </button>
     </div>
 
-    <div class="welcome-message">Welcome to my website!<br></div>
+    <div class="welcome-message">Hello, My name SENGLY <br>Welcome to my website!<br></div>
 
     <div class="filter-bar" id="filterBar">
         <!-- Buttons will be added here dynamically -->
@@ -106,6 +112,7 @@
     });
 
     // Pause autoplay on mouse enter, resume on mouse leave
+    const swiperContainer = document.getElementById('swiper-container');
     swiperContainer.addEventListener('mouseenter', () => {
         swiper.autoplay.stop();
     });
@@ -113,6 +120,39 @@
     swiperContainer.addEventListener('mouseleave', () => {
         swiper.autoplay.start();
     });
+
+    // Digital Clock
+    function showTime(){
+        var date = new Date();
+        var h = date.getHours(); // 0 - 23
+        var m = date.getMinutes(); // 0 - 59
+        var s = date.getSeconds(); // 0 - 59
+        var session = "AM";
+
+        if(h == 0){
+            h = 12;
+        }
+
+        if(h > 12){
+            h = h - 12;
+            session = "PM";
+        }
+
+        h = (h < 10) ? "0" + h : h;
+        m = (m < 10) ? "0" + m : m;
+        s = (s < 10) ? "0" + s : s;
+
+        var time = h + ":" + m + ":" + s + " " + session;
+
+        var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        var currentDate = date.toLocaleDateString("en-US", options);
+
+        document.getElementById("MyClockDisplay").innerHTML = time + " - " + currentDate;
+
+        setTimeout(showTime, 1000);
+    }
+
+    showTime();
 </script>
 </body>
 </html>
