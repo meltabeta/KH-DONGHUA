@@ -507,6 +507,31 @@ main {
 }
 
 @media (max-width: 480px) {
+    body {
+        font-size: 0.8em;
+    }
+
+    header img {
+        height: 50px;
+    }
+
+    header h1 {
+        font-size: 1em;
+    }
+
+    .welcome-message {
+        font-size: 1em;
+    }
+
+    .credit-message {
+        font-size: 0.7em;
+    }
+
+    .filter-bar button {
+        font-size: 0.8em;
+        padding: 5px 10px;
+    }
+
     .swiper-container {
         width: calc(100% - 20px); /* Adjust width to account for padding */
         height: 150px; /* Reduced height for smaller screens */
@@ -515,7 +540,12 @@ main {
     }
 
     .swiper-title {
-        font-size: 1em;
+        font-size: 0.8em;
+    }
+
+    .playlist-item img {
+        max-width: 70px; /* Set a smaller fixed width */
+        margin-right: 10px; /* Add less space between image and text */
     }
 
     .search-container {

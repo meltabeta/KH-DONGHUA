@@ -18,12 +18,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const playlistId = urlParams.get('playlistId');
     const episodeNumber = parseInt(urlParams.get('episode'), 10) || 1; // Default to 1 if no episode parameter
     const videoContainer = document.querySelector('.video-container');
-    const videoInfo = document.querySelector('.video-info');
     const videoTitle = document.getElementById('videoTitle');
+    const episodeTitle = document.getElementById('episodeTitle');
     const episodeList = document.getElementById('episodeList');
     const episodeDropdown = document.getElementById('episodeDropdown');
     const prevEpisodeBtn = document.getElementById('prevEpisodeBtn');
     const nextEpisodeBtn = document.getElementById('nextEpisodeBtn');
+    const backButton = document.getElementById('backButton');
     const paginationControls = document.createElement('div');
     paginationControls.className = 'pagination-controls';
     videoContainer.appendChild(paginationControls);
@@ -31,6 +32,10 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentEpisodeIndex = 0;
     let currentPage = 1;
     const itemsPerPage = 6; // 3 columns * 2 rows
+
+    backButton.addEventListener('click', () => {
+        window.location.href = 'index.html';
+    });
 
     function fetchEpisodes() {
         const episodesRef = ref(database, `videoDetails`);
@@ -73,8 +78,9 @@ document.addEventListener('DOMContentLoaded', function() {
         videoContainer.querySelector('iframe')?.remove(); // Remove existing iframe if any
         const iframe = document.createElement('div');
         iframe.innerHTML = video.videoLink;
-        videoContainer.insertBefore(iframe.firstChild, videoInfo);
+        videoContainer.insertBefore(iframe.firstChild, videoContainer.firstChild);
         videoTitle.textContent = `Now you're watching: Episode ${video.videoEpisode}`;
+        episodeTitle.textContent = `Episode Title: ${video.videoTitle}`;
         episodeDropdown.value = currentEpisodeIndex; // Update dropdown selection
         updateButtonState();
     }

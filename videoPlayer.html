@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KH-Donghua Video Player</title>
+    <title>KH-DONGHUA Video Player</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30">
     <script type="module" src="videoPlayer.js" defer></script>
@@ -54,39 +54,19 @@
         .digital-clock {
             text-align: center;
             color: #00ffcc;
-            font-family: 'Roboto Mono', monospace; /* Use a monospace font for a digital look */
+            font-family: 'Roboto Mono', monospace;
             text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc, 0 0 30px #00ffcc;
-            font-size: 0.5em; /* Adjusted font size */
+            font-size: 0.8em; /* Increased font size */
             background-color: #333;
-            padding: 5px 10px; /* Adjusted padding */
+            padding: 10px 20px; /* Increased padding */
             border-radius: 5px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             margin-top: 0.5em;
         }
 
+        .digital-clock .time,
         .digital-clock .date {
-            font-size: 0.4em; /* Adjusted font size */
-            margin-top: 5px;
-        }
-
-        .back-button {
-            padding: 10px 20px;
-            font-size: 1em;
-            color: #fff;
-            background-color: #007BFF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            z-index: 1000;
             display: inline-block;
-            margin-bottom: 10px;
-        }
-
-        .back-button:hover {
-            background-color: #0056b3;
-            transform: scale(1.05);
         }
 
         main {
@@ -115,7 +95,7 @@
 
         .video-info {
             text-align: center;
-            margin-top: 10px;
+            margin-bottom: 10px; /* Adjusted margin for spacing */
         }
 
         .video-info h2 {
@@ -123,13 +103,43 @@
             margin: 10px 0;
         }
 
+        .video-info p {
+            font-size: 1em;
+            margin: 5px 0;
+            color: #ccc;
+        }
+
         .controls-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             width: 100%;
             max-width: 800px;
             margin: 20px 0;
+        }
+
+        .back-button {
+            margin-right: 20px; /* Add space between back button and episode selector */
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #f1f1f1;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .back-button:active {
+            background-color: #ddd;
+            box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+            transform: translateY(1px);
         }
 
         .episode-dropdown {
@@ -152,6 +162,7 @@
             display: flex;
             justify-content: center;
             margin: 20px 0;
+            width: 100%; /* Ensure the buttons take full width */
         }
 
         .episode-controls button {
@@ -164,6 +175,7 @@
             border-radius: 5px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            flex: 1; /* Ensure buttons take equal space */
         }
 
         .episode-controls button:hover {
@@ -284,12 +296,13 @@
             }
 
             .episode-controls {
-                flex-direction: column;
+                flex-direction: row; /* Ensure buttons are in a row */
+                width: 100%;
             }
 
             .episode-controls button {
-                margin: 10px 0;
-                width: 100%;
+                margin: 5px;
+                width: 50%; /* Ensure each button takes half the width */
             }
 
             .controls-container {
@@ -297,7 +310,6 @@
                 justify-content: space-between;
             }
 
-            .back-button,
             .episode-dropdown {
                 flex: 1;
                 margin: 5px;
@@ -328,15 +340,12 @@
                 font-size: 0.9em;
             }
 
-            .back-button,
             .episode-dropdown {
                 width: 100%;
                 margin: 5px 0;
             }
         }
     </style>
-
-
 </head>
 <body>
 <header>
@@ -344,7 +353,7 @@
         <a href="index.html"><img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-Donghua Logo" class="logo"></a>
     </div>
     <div class="header-center">
-        <h1>KH-Donghua</h1>
+        <h1>KH-DONGHUA</h1>
         <div id="clock" class="digital-clock">
             <div class="time"></div>
             <div class="date"></div>
@@ -352,17 +361,18 @@
     </div>
 </header>
 <main>
+    <div class="video-info">
+        <h2 id="videoTitle">Now you're watching: Episode 1</h2>
+        <p id="episodeTitle">Episode Title: The Beginning</p>
+    </div>
     <div class="controls-container">
-        <a href="index.html" class="back-button">Back</a>
+        <button id="backButton" class="back-button">Back</button>
         <select id="episodeDropdown" class="episode-dropdown">
             <!-- Episodes will be dynamically generated here -->
         </select>
     </div>
     <div class="video-container">
         <div class="video-placeholder"></div> <!-- Placeholder for iframe -->
-        <div class="video-info">
-            <h2 id="videoTitle">Now you're watching: Episode 1</h2>
-        </div>
         <div class="episode-controls">
             <button id="prevEpisodeBtn">Previous</button>
             <button id="nextEpisodeBtn">Next</button>
