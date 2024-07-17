@@ -76,7 +76,7 @@ header h1 {
     background-color: #222;
     padding: 3px 8px; /* Adjusted padding */
     border-radius: 10px;
-    margin: 10px 0; /* Reduced margin */
+    margin: 5px 0; /* Further reduced margin */
     box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
     width: fit-content;
 }
@@ -331,7 +331,7 @@ main {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 10px 0; /* Reduced margin */
+    margin: 5px 0; /* Further reduced margin */
 }
 
 .search-container input {
@@ -652,7 +652,7 @@ main {
     }
 
     .filter-bar button:active {
-        background-color: #ccc;
+        background-color: #ccc
     }
 
     .sort-button {
