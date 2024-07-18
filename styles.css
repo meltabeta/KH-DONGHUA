@@ -353,7 +353,7 @@ main {
     display: flex;
     justify-content: space-between; /* Ensure content stays in one line */
     align-items: center;
-    margin: 20px 0;
+    margin: 10px 0; /* Reduce space above and below */
     gap: 10px; /* Space between input and buttons */
     width: 100%;
 }
@@ -451,21 +451,16 @@ main {
 }
 
 /* Apply styles for tablets and desktops */
-@media (min-width: 769px) {
-    body {
-        padding-left: 20px; /* Add padding to the left */
-        padding-right: 20px; /* Add padding to the right */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 50%; /* Limit the container width to 50% */
+        margin-left: 25%; /* Add 1/4 width margin to the left */
+        margin-right: 25%; /* Add 1/4 width margin to the right */
     }
-
     main {
-        margin-left: 20px; /* Add margin to the left */
-        margin-right: 20px; /* Add margin to the right */
-    }
-
-    .swiper-container {
-        width: calc(100% - 40px); /* Adjust width to account for padding */
-        margin-left: 20px; /* Add margin to the left */
-        margin-right: 20px; /* Add margin to the right */
+        max-width: 50%; /* Limit the main width to 50% */
+        margin-left: 25%; /* Add 1/4 width margin to the left */
+        margin-right: 25%; /* Add 1/4 width margin to the right */
     }
 }
 
@@ -650,7 +645,7 @@ main {
     .search-container {
         flex-direction: row; /* Ensure content stays in one line */
         justify-content: space-between; /* Adjust spacing */
-        margin: 20px 0;
+        margin: 10px 0; /* Reduce space above and below */
         gap: 10px; /* Add space between input and buttons */
         width: 100%;
     }
@@ -739,5 +734,71 @@ main {
     .sort-button {
         padding: 5px 10px; /* Reduce padding */
         font-size: 0.8em; /* Reduce font size */
+    }
+}
+
+/* Reduce font sizes and image sizes by 10%, and slideshow by 15% */
+@media (max-width: 1024px) {
+    body {
+        font-size: 0.9em; /* Reduce font size by 10% */
+    }
+
+    header img {
+        height: 67.5px; /* Reduce height by 10% */
+    }
+
+    header h1 {
+        font-size: 1.35em; /* Reduce font size by 10% */
+    }
+
+    .clock {
+        font-size: 0.9em; /* Reduce font size by 10% */
+    }
+
+    .swiper-container {
+        height: 255px; /* Reduce height by 15% */
+    }
+
+    .swiper-title {
+        font-size: 0.85em; /* Reduce font size by 15% */
+    }
+
+    .playlist-item img {
+        max-width: 90px; /* Reduce width by 10% */
+    }
+
+    .playlist-item h3 {
+        font-size: 0.9em; /* Reduce font size by 10% */
+    }
+
+    .playlist-item p {
+        font-size: 0.9em; /* Reduce font size by 10% */
+    }
+
+    .filter-bar button {
+        font-size: 0.9em; /* Reduce font size by 10% */
+    }
+
+    .search-container input {
+        font-size: 0.9em; /* Reduce font size by 10% */
+    }
+
+    .search-container button {
+        font-size: 0.9em; /* Reduce font size by 10% */
+    }
+
+    .welcome-message {
+        font-size: 1.08em; /* Reduce font size by 10% */
+    }
+
+    .credit-message {
+        font-size: 0.72em; /* Reduce font size by 10% */
+    }
+}
+
+/* Specifically for smaller mobile screens like iPhone XS */
+@media (max-width: 375px) {
+    .swiper-container {
+        height: 225px; /* Reduce height for smaller mobile screens */
     }
 }
