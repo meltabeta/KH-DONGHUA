@@ -16,7 +16,6 @@ const database = getDatabase(app);
 
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
-    const searchBtn = document.getElementById('searchBtn');
     const clearBtn = document.getElementById('clearBtn');
     const filterBar = document.getElementById('filterBar');
     const sortOrderBtn = document.getElementById('sortOrderBtn');
@@ -34,8 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let currentFilter = 'all';
     let sortOrder = 'desc'; // default sort order
 
-    searchBtn.addEventListener('click', function(event) {
-        event.preventDefault();
+    searchInput.addEventListener('input', function() {
         filterPlaylists();
     });
 

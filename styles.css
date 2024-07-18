@@ -50,7 +50,7 @@ header.show {
 }
 
 header img {
-    height: 50px; /* Adjust the height */
+    height: 75px;
     animation: heartbeat 1.5s infinite;
     cursor: pointer; /* Add cursor pointer */
 }
@@ -351,12 +351,15 @@ main {
 
 .search-container {
     display: flex;
-    justify-content: center;
+    justify-content: space-between; /* Ensure content stays in one line */
     align-items: center;
-    margin: 5px 0; /* Further reduced margin */
+    margin: 20px 0;
+    gap: 10px; /* Space between input and buttons */
+    width: 100%;
 }
 
 .search-container input {
+    flex-grow: 1;
     padding: 10px;
     margin-right: 5px;
     width: 200px;
@@ -365,6 +368,7 @@ main {
     background: #333;
     color: #fff;
     font-family: 'JetBrains Mono', monospace;
+    font-size: 16px; /* Set font size to prevent zoom */
 }
 
 .search-container button {
@@ -377,6 +381,28 @@ main {
     transition: background-color 0.3s ease;
     margin-right: 5px; /* Add margin to the button */
     font-family: 'JetBrains Mono', monospace;
+}
+
+#clearBtn {
+    background: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#clearBtn:hover {
+    background-color: #0056b3;
+}
+
+#clearBtn:active {
+    background-color: #00408a;
 }
 
 .search-container button:last-child {
@@ -474,7 +500,7 @@ main {
 
     .search-container {
         flex-direction: row;
-        justify-content: center;
+        justify-content: space-between; /* Ensure content stays in one line */
         align-items: center;
         margin: 20px 0;
         gap: 10px; /* Add space between input and buttons */
@@ -482,8 +508,9 @@ main {
     }
 
     .search-container input {
+        flex-grow: 1;
         padding: 5px 10px; /* Reduce padding */
-        width: 100px; /* Reduce width */
+        width: auto; /* Adjust width */
         border: none;
         border-radius: 5px;
         background: #333;
@@ -621,27 +648,28 @@ main {
     }
 
     .search-container {
-        flex-direction: column; /* Stack elements vertically */
-        justify-content: center;
-        align-items: center;
+        flex-direction: row; /* Ensure content stays in one line */
+        justify-content: space-between; /* Adjust spacing */
         margin: 20px 0;
         gap: 10px; /* Add space between input and buttons */
         width: 100%;
     }
 
     .search-container input {
+        flex-grow: 1;
         padding: 5px 10px; /* Reduce padding */
-        width: 90%; /* Adjust width */
+        width: auto; /* Adjust width */
         border: none;
         border-radius: 5px;
         background: #333;
         color: #fff;
         font-family: 'JetBrains Mono', monospace;
+        font-size: 16px; /* Set font size to prevent zoom */
     }
 
     .search-container button {
         padding: 5px 10px; /* Reduce padding */
-        width: 90%; /* Adjust button width */
+        width: auto; /* Adjust button width */
         border: none;
         border-radius: 5px;
         background: #007BFF;
@@ -652,10 +680,23 @@ main {
     }
 
     .search-container #clearBtn {
-        background: none;
+        background: #007BFF;
         color: #fff;
-        padding: 0;
-        width: auto;
+        padding: 5px 10px; /* Reduce padding */
+        width: auto; /* Adjust button width */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-family: 'JetBrains Mono', monospace;
+    }
+
+    .search-container #clearBtn:hover {
+        background-color: #0056b3;
+    }
+
+    .search-container #clearBtn:active {
+        background-color: #00408a;
     }
 
     .search-container .cross-icon {

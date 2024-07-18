@@ -29,7 +29,7 @@
             <a href="#" id="donateLink">Donate me!</a>
         </div>
         <div class="header-logo">
-            <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-Donghua Logo" id="logo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-Donghua Logo" id="headerLogo">
             <h1>KH-DONGHUA</h1>
         </div>
     </header>
@@ -39,10 +39,7 @@
     <!-- Search Container -->
     <div class="search-container">
         <input type="text" id="searchInput" placeholder="Search by video title...">
-        <button id="searchBtn">Search</button>
-        <button id="clearBtn">
-            <span class="cross-icon">&#10005;</span>
-        </button>
+        <button id="clearBtn">Remove Search</button> <!-- Replace icon with button -->
     </div>
 
     <div class="welcome-message">Hello, My name SENGLY <br>Welcome to my website!<br></div>
@@ -77,6 +74,7 @@
         const header = document.querySelector('header');
         const swiperContainer = document.querySelector('.swiper-container');
         const clock = document.getElementById('MyClockDisplay');
+        const headerLogo = document.getElementById('headerLogo');
 
         window.addEventListener('scroll', () => {
             if (window.scrollY > swiperContainer.clientHeight) {
@@ -86,6 +84,11 @@
                 header.classList.remove('show');
                 swiperContainer.classList.remove('hide');
             }
+        });
+
+        // Scroll to top function
+        headerLogo.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         });
     });
 
@@ -169,11 +172,6 @@
 
     showTime();
 
-    // Scroll to top function
-    const headerLogo = document.getElementById('headerLogo');
-    headerLogo.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
 </script>
 </body>
 </html>
