@@ -24,24 +24,39 @@ header {
     background-color: #1f1f1f;
     color: #fff;
     display: flex;
-    flex-direction: column;
+    flex-direction: row; /* Adjust layout to row */
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* Center items horizontally */
     padding: 1em;
     transition: background-color 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative;
+    position: fixed;
+    top: -100px; /* Hide the header initially */
+    left: 0;
     width: 100%;
-    overflow-x: hidden; /* Hide horizontal overflow */
+    z-index: 1000; /* Ensure the header is on top */
+    transition: top 0.3s;
+}
+
+header.show {
+    top: 0; /* Show the header */
+}
+
+.header-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
 }
 
 header img {
-    height: 75px;
+    height: 50px; /* Adjust the height */
     animation: heartbeat 1.5s infinite;
+    cursor: pointer; /* Add cursor pointer */
 }
 
 header h1 {
-    margin: 0;
+    margin: 0 0 0 10px; /* Adjust margin for better spacing */
     font-size: 1.5em;
     animation: pop 1s ease-out;
 }
@@ -49,7 +64,7 @@ header h1 {
 .nav-container {
     position: absolute;
     top: 10px;
-    right: 10px;
+    left: 10px; /* Align donate button to the left */
 }
 
 .nav-container a {
@@ -79,6 +94,7 @@ header h1 {
     margin: 5px 0; /* Further reduced margin */
     box-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
     width: fit-content;
+    margin-top: 20px; /* Add margin for spacing */
 }
 
 main {
@@ -303,6 +319,12 @@ main {
     border-radius: 10px; /* Optional: rounded corners */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: shadow for better visibility */
     overflow: hidden; /* Hide overflow */
+    transition: opacity 0.3s;
+}
+
+.swiper-container.hide {
+    opacity: 0;
+    height: 0; /* Hide the slideshow */
 }
 
 .swiper-slide {
@@ -543,12 +565,30 @@ main {
         font-size: 0.8em;
     }
 
+    header {
+        flex-direction: row; /* Keep items in a row */
+        align-items: center;
+        justify-content: center;
+    }
+
     header img {
         height: 50px;
     }
 
     header h1 {
         font-size: 1em;
+        margin-top: 5px;
+    }
+
+    .header-logo {
+        justify-content: center;
+    }
+
+    .nav-container {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        margin-top: 0;
     }
 
     .welcome-message {
@@ -581,7 +621,7 @@ main {
     }
 
     .search-container {
-        flex-direction: row;
+        flex-direction: column; /* Stack elements vertically */
         justify-content: center;
         align-items: center;
         margin: 20px 0;
@@ -591,7 +631,7 @@ main {
 
     .search-container input {
         padding: 5px 10px; /* Reduce padding */
-        width: 100px; /* Reduce width */
+        width: 90%; /* Adjust width */
         border: none;
         border-radius: 5px;
         background: #333;
@@ -601,7 +641,7 @@ main {
 
     .search-container button {
         padding: 5px 10px; /* Reduce padding */
-        width: auto; /* Adjust button width */
+        width: 90%; /* Adjust button width */
         border: none;
         border-radius: 5px;
         background: #007BFF;
@@ -652,7 +692,7 @@ main {
     }
 
     .filter-bar button:active {
-        background-color: #ccc
+        background-color: #ccc;
     }
 
     .sort-button {

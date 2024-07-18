@@ -19,22 +19,20 @@
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination"></div>
-        <!-- Add Navigation -->
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
     </div>
-
-    <header>
-        <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-Donghua Logo">
-        <br>
-        <h1>KH-DONGHUA</h1>
-        <div class="nav-container">
-            <a href="#" id="donateLink">Donate me!</a>
-        </div>
-    </header>
 
     <!-- Digital Clock -->
     <div id="MyClockDisplay" class="clock"></div>
+
+    <header>
+        <div class="nav-container">
+            <a href="#" id="donateLink">Donate me!</a>
+        </div>
+        <div class="header-logo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-Donghua Logo" id="logo">
+            <h1>KH-DONGHUA</h1>
+        </div>
+    </header>
 </div>
 
 <main>
@@ -75,6 +73,22 @@
 
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const header = document.querySelector('header');
+        const swiperContainer = document.querySelector('.swiper-container');
+        const clock = document.getElementById('MyClockDisplay');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > swiperContainer.clientHeight) {
+                header.classList.add('show');
+                swiperContainer.classList.add('hide');
+            } else {
+                header.classList.remove('show');
+                swiperContainer.classList.remove('hide');
+            }
+        });
+    });
+
     // JavaScript for pop-up functionality
     const donateLink = document.getElementById('donateLink');
     const donatePopup = document.getElementById('donatePopup');
@@ -113,12 +127,12 @@
     });
 
     // Pause autoplay on mouse enter, resume on mouse leave
-    const swiperContainer = document.getElementById('swiper-container');
-    swiperContainer.addEventListener('mouseenter', () => {
+    const swiperContainerElement = document.getElementById('swiper-container');
+    swiperContainerElement.addEventListener('mouseenter', () => {
         swiper.autoplay.stop();
     });
 
-    swiperContainer.addEventListener('mouseleave', () => {
+    swiperContainerElement.addEventListener('mouseleave', () => {
         swiper.autoplay.start();
     });
 
@@ -154,6 +168,12 @@
     }
 
     showTime();
+
+    // Scroll to top function
+    const headerLogo = document.getElementById('headerLogo');
+    headerLogo.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 </script>
 </body>
 </html>
