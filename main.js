@@ -178,7 +178,11 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.classList.add('btn', 'fixed-white');
             btn.textContent = 'Watch Now';
             btn.addEventListener('click', () => {
-                window.location.href = `videoPlayer.html?playlistId=${slide.playlistId}&episode=${slide.episodeId}`;
+                const searchBox = document.getElementById('search-box');
+                searchBox.value = slide.title;
+                const playlistSection = document.getElementById('playlists');
+                playlistSection.scrollIntoView({ behavior: 'smooth' });
+                searchBox.dispatchEvent(new Event('input'));
             });
 
             homeText.appendChild(span);
@@ -190,6 +194,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         swiper.update();
+    });
+
+    // Event listener to filter playlists based on search box input
+    const searchBox = document.getElementById('search-box');
+    searchBox.addEventListener('input', () => {
+        const filterValue = searchBox.value.toLowerCase();
+        const moviesContainer = document.querySelector('.movies-container');
+        const movieBoxes = moviesContainer.querySelectorAll('.box');
+        movieBoxes.forEach(box => {
+            const title = box.querySelector('h3').textContent.toLowerCase();
+            if (title.includes(filterValue)) {
+                box.style.display = 'block';
+            } else {
+                box.style.display = 'none';
+            }
+        });
     });
 
     // Fetching playlist types to populate the filter dropdown
