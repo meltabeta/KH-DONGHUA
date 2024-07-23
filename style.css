@@ -130,7 +130,7 @@ body.dark-mode .navbar a {
 }
 
 #menu-icon {
-    font-size: 20px;
+    font-size: 28px; /* Increased the size for mobile */
     cursor: pointer;
     z-index: 1000001;
     display: none;
@@ -435,15 +435,17 @@ body.dark-mode .box span {
 .filters {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between; /* Align items in a single line */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    gap: 10px; /* Add space between items */
 }
 
 #playlist-type-filter {
-    margin-right: 10px;
     padding: 8px;
     font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 5px;
+    flex: 1; /* Allow it to grow and shrink */
 }
 
 #search-box {
@@ -451,6 +453,7 @@ body.dark-mode .box span {
     font-size: 0.9rem;
     border: 1px solid #ccc;
     border-radius: 5px;
+    flex: 2; /* Allow it to grow and shrink */
 }
 
 .coming-container,
@@ -638,6 +641,16 @@ body.dark-mode .copyright {
     .donghua-container {
         grid-template-columns: repeat(auto-fit, minmax(140px, auto));
     }
+
+    .filters {
+        flex-wrap: wrap; /* Allow items to wrap if needed */
+    }
+
+    #playlist-type-filter,
+    #search-box {
+        flex: 1 1 45%; /* Make them take equal width */
+        margin-bottom: 10px; /* Add space between rows if they wrap */
+    }
 }
 
 @media (max-width: 472px) {
@@ -673,5 +686,15 @@ body.dark-mode .copyright {
     .anime-container,
     .donghua-container {
         grid-template-columns: repeat(auto-fit, minmax(120px, auto));
+    }
+
+    .filters {
+        flex-wrap: wrap; /* Allow items to wrap if needed */
+    }
+
+    #playlist-type-filter,
+    #search-box {
+        flex: 1 1 45%; /* Make them take equal width */
+        margin-bottom: 10px; /* Add space between rows if they wrap */
     }
 }
