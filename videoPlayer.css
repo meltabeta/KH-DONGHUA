@@ -132,7 +132,7 @@ body.dark-mode .navbar a {
 }
 
 #menu-icon {
-    font-size: 20px;
+    font-size: 28px; /* Increased the size for mobile */
     cursor: pointer;
     z-index: 1000001;
     display: none;
@@ -334,7 +334,7 @@ main {
 
 .video-controls {
     display: flex;
-    justify-content: center; /* Center the buttons */
+    justify-content: space-around; /* Distribute buttons evenly */
     align-items: center;
     margin-bottom: 20px;
 }
@@ -441,13 +441,15 @@ main {
     list-style: none;
     padding: 0;
     width: 100%;
+    display: grid; /* Use grid display */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Adjust column size */
+    gap: 10px; /* Add space between items */
 }
 
 .popup-content li {
     padding: 10px;
     background-color: #f1f1f1;
     border-radius: 5px;
-    margin-bottom: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     text-align: left;
@@ -568,6 +570,18 @@ main {
     .donghua-container {
         grid-template-columns: repeat(auto-fit, minmax(140px, auto));
     }
+
+    .filters {
+        justify-content: center; /* Center filters on smaller screens */
+    }
+
+    .video-controls {
+        flex-direction: column; /* Stack buttons vertically on smaller screens */
+    }
+
+    .video-controls button {
+        margin: 5px 0; /* Add margin between stacked buttons */
+    }
 }
 
 @media (max-width: 472px) {
@@ -603,5 +617,25 @@ main {
     .anime-container,
     .donghua-container {
         grid-template-columns: repeat(auto-fit, minmax(120px, auto));
+    }
+
+    .filters {
+        flex-direction: column; /* Stack filters vertically */
+        align-items: stretch; /* Make filters full width */
+    }
+
+    #playlist-type-filter,
+    #search-box {
+        flex: 1; /* Make filters take full width */
+    }
+
+    .video-controls {
+        flex-direction: column; /* Stack buttons vertically on smaller screens */
+        width: 100%; /* Make buttons take full width */
+    }
+
+    .video-controls button {
+        width: 100%; /* Make buttons take full width */
+        margin: 5px 0; /* Add margin between stacked buttons */
     }
 }
