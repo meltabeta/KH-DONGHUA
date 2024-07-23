@@ -90,6 +90,14 @@ body.dark-mode .logo {
     margin-right: 10px;
 }
 
+.footer-logo-text {
+    color: black;
+}
+
+body.dark-mode .footer-logo-text {
+    color: var(--dark-text-color);
+}
+
 .bx {
     color: var(--main-color);
 }
@@ -201,9 +209,6 @@ body.dark-mode .navbar a {
     transition: opacity 0.2s;
 }
 
-
-
-
 .pagination-controls {
     display: flex;
     align-items: center;
@@ -230,9 +235,6 @@ body.dark-mode .navbar a {
     font-size: 1rem;
     font-weight: bold;
 }
-
-
-
 
 .btn {
     padding: 0.5rem 1rem;
@@ -588,6 +590,10 @@ body.dark-mode .box span {
     align-items: center;
 }
 
+body.dark-mode .footer {
+    color: var(--dark-text-color);
+}
+
 .social {
     display: flex;
     align-items: center;
@@ -636,7 +642,7 @@ body.dark-mode .social .bx:hover {
 .copyright {
     padding: 20px;
     text-align: center;
-    color: var(--bg-color);
+    color: var(--text-color);
 }
 
 body.dark-mode .copyright {

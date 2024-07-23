@@ -285,8 +285,6 @@ document.addEventListener('DOMContentLoaded', function () {
     fetchAndDisplayPlaylists();
 });
 
-
-
 document.addEventListener('DOMContentLoaded', function () {
     // Reference to the Firebase database
     const dbRef = firebase.database().ref();
