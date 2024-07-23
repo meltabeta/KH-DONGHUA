@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KH-DONGHUA Website</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
+</head>
+<body class="dark-mode">
+<!-- Navbar  -->
+<header>
+    <a href="#home" class="logo">
+        <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-DONGHUA Logo" class="logo-img">
+        KH-DONGHUA
+    </a>
+    <div class="bx bx-menu" id="menu-icon"></div>
+    <!-- menu  -->
+    <ul class="navbar">
+        <li><a href="#home" class="home-active">Home</a></li>
+        <li><a href="#playlists">Playlists</a></li>
+        <li><a href="#anime">Anime</a></li>
+        <li><a href="#donghua">Donghua</a></li>
+    </ul>
+    <div class="header-buttons">
+        <a href="#" class="btn fixed-white" id="donateBtn">Donate Me!</a>
+        <i class="bx bx-moon bx-sm" id="toggleDarkMode"></i>
+    </div>
+</header>
+
+<!-- Modal Structure -->
+<div id="donateModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/bakong.jpg?alt=media&token=b7b3de62-76e4-4887-a0af-bc7728eebb32" alt="Donate Image" class="donate-modal-img">
+        <div class="modal-actions">
+            <button id="copyLink">Copy Link</button>
+            <a id="downloadImage" href="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/bakong.jpg?alt=media&token=b7b3de62-76e4-4887-a0af-bc7728eebb32" download>Save Image</a>
+            <button id="shareImage">Share</button>
+        </div>
+    </div>
+</div>
+
+<!-- Home  -->
+<section class="home swiper" id="home">
+    <div class="swiper-wrapper">
+        <!-- Dynamic content will be inserted here -->
+    </div>
+    <div class="swiper-pagination"></div>
+</section>
+
+<!-- Movies  -->
+<div class="movies-section" id="playlists">
+    <h2 class="heading">Playlist</h2>
+    <!-- Filters -->
+    <br>
+    <div class="filters">
+        <select id="playlist-type-filter">
+            <option value="">All Types</option>
+        </select>
+        <input type="text" id="search-box" placeholder="Search...">
+    </div>
+    <!-- Movies container  -->
+    <div class="movies-container">
+        <!-- Dynamic content will be inserted here -->
+    </div>
+</div>
+
+<!-- Anime -->
+<section class="anime" id="anime">
+    <h2 class="heading">Anime</h2>
+    <div class="anime-container swiper">
+        <div class="swiper-wrapper">
+            <!-- Dynamic content will be inserted here -->
+        </div>
+    </div>
+</section>
+
+<!-- Donghua -->
+<section class="donghua" id="donghua">
+    <h2 class="heading">Donghua</h2>
+    <div class="donghua-container swiper">
+        <div class="swiper-wrapper">
+            <!-- Dynamic content will be inserted here -->
+        </div>
+    </div>
+</section>
+
+<!-- footer -->
+<section class="footer">
+    <a href="#home" class="logo">
+        <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-DONGHUA Logo" class="logo-img">
+        KH-DONGHUA
+    </a>
+    <div class="social">
+        <a href="https://dailymotion.com/donghua_fan_anime" target="_blank">
+            <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/chart-logo.png?alt=media&token=36b8ae14-598a-4d32-b6b7-bd35558ddf4f" alt="Dailymotion">
+        </a>
+        <a href="https://facebook.com/donghua_fan_anime" target="_blank">
+            <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/chart-logo.png?alt=media&token=36b8ae14-598a-4d32-b6b7-bd35558ddf4f" alt="Facebook">
+        </a>
+    </div>
+</section>
+
+<!-- Copyright -->
+<div class="copyright">
+    <p>&#169; SENGLY All Right Reserved</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

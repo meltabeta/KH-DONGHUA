@@ -8,20 +8,27 @@
     <link rel="icon" href="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30">
     <script type="module" src="videoPlayer.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="dark-mode">
 <div class="container">
     <header>
-        <div class="header-content">
-            <div class="header-logo">
-                <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-Donghua Logo" id="headerLogo">
-            </div>
-            <div class="header-title">
-                <h1>KH-DONGHUA</h1>
-            </div>
+        <a href="index.html" class="logo">
+            <img src="https://firebasestorage.googleapis.com/v0/b/kh-donghua.appspot.com/o/logo-profile.jpg?alt=media&token=3f22eb63-259c-4373-b25b-60f1214c0b30" alt="KH-DONGHUA Logo" class="logo-img">
+            KH-DONGHUA
+        </a>
+        <div class="bx bx-menu" id="menu-icon"></div>
+        <ul class="navbar">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#playlists">Playlists</a></li>
+            <li><a href="index.html#anime">Anime</a></li>
+            <li><a href="index.html#donghua">Donghua</a></li>
+        </ul>
+        <div class="header-buttons">
+            <i class="bx bx-moon bx-sm" id="toggleDarkMode"></i>
         </div>
     </header>
-<br>
+    <br>
     <main>
         <div class="video-section">
             <div class="breadcrumb">
@@ -29,7 +36,8 @@
             </div>
             <div class="video-info">
                 <h2 id="videoTitle">Video Title</h2>
-                <div id="clock"></div> <!-- Digital clock will be displayed here -->
+                <div id="clock"></div>
+                <br><!-- Digital clock will be displayed here -->
                 <div id="videoPlayerContainer"></div>
                 <div id="videoDescription" class="description">Video Description</div>
             </div>
@@ -63,7 +71,6 @@
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
-<script src="videoPlayer.js" type="module"></script>
 <script src="clock.js" defer></script> <!-- Include clock.js -->
 </body>
 </html>

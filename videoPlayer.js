@@ -116,4 +116,37 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     fetchVideoDetails();
+
+    // Function to toggle header shadow based on scroll position
+    function toggleHeaderShadow() {
+        const header = document.querySelector('header');
+        header.classList.toggle('shadow', window.scrollY > 0);
+    }
+
+    // Dark Mode Toggle
+    const toggleDarkMode = document.getElementById('toggleDarkMode');
+    toggleDarkMode.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        toggleDarkMode.classList.toggle('bx-moon');
+        toggleDarkMode.classList.toggle('bx-sun');
+        toggleHeaderShadow(); // Ensure header shadow is applied correctly
+    });
+
+    // Initial check for header shadow on page load
+    toggleHeaderShadow();
+
+    // Add scroll event listener to toggle header shadow
+    window.addEventListener('scroll', toggleHeaderShadow);
+
+    let menu = document.querySelector('#menu-icon');
+    let navbar = document.querySelector('.navbar');
+
+    menu.onclick = () => {
+        menu.classList.toggle('bx-x');
+        navbar.classList.toggle('active');
+    }
+    window.onscroll = () => {
+        menu.classList.remove('bx-x');
+        navbar.classList.remove('active');
+    }
 });
