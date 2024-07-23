@@ -147,6 +147,145 @@ document.getElementById("shareImage").onclick = function() {
         alert("Web Share API is not supported in your browser.");
     }
 }
+document.addEventListener('DOMContentLoaded', function () {
+    // Reference to the Firebase database
+    const dbRef = firebase.database().ref();
+    const itemsPerPage = 10; // Number of items per page
+    let currentPage = 1;
+    let totalPages = 1;
+    let allPlaylists = [];
+
+    const fetchAndDisplayPlaylists = () => {
+        dbRef.child('videoPlaylists').once('value').then(snapshot => {
+            const videoPlaylists = snapshot.val();
+            const videoDetails = dbRef.child('videoDetails');
+            const moviesContainer = document.querySelector('.movies-container');
+
+            // Create a map to count episodes and get the latest submission date per playlist
+            const episodesCount = {};
+            const latestSubmissionDate = {};
+            videoDetails.once('value').then(videoDetailsSnapshot => {
+                const videoDetails = videoDetailsSnapshot.val();
+                for (const videoKey in videoDetails) {
+                    const video = videoDetails[videoKey];
+                    const playlistId = video.playList;
+                    if (episodesCount[playlistId]) {
+                        episodesCount[playlistId]++;
+                        if (new Date(video.lastSubmittedDate) > new Date(latestSubmissionDate[playlistId])) {
+                            latestSubmissionDate[playlistId] = video.lastSubmittedDate;
+                        }
+                    } else {
+                        episodesCount[playlistId] = 1;
+                        latestSubmissionDate[playlistId] = video.lastSubmittedDate;
+                    }
+                }
+
+                // Generate an array of playlists with the latest submission date for sorting and filtering
+                allPlaylists = Object.keys(videoPlaylists).map(key => {
+                    return {
+                        ...videoPlaylists[key],
+                        totalEpisodes: episodesCount[key] || 0,
+                        lastSubmittedDate: latestSubmissionDate[key] || new Date(0),
+                        id: key
+                    };
+                });
+
+                // Initial display of all playlists sorted by last submission date
+                allPlaylists.sort((a, b) => new Date(b.lastSubmittedDate) - new Date(a.lastSubmittedDate));
+                totalPages = Math.ceil(allPlaylists.length / itemsPerPage);
+                updatePaginationControls();
+                displayPlaylists(getCurrentPagePlaylists());
+            });
+        });
+    };
+
+    const displayPlaylists = (playlists) => {
+        const moviesContainer = document.querySelector('.movies-container');
+        moviesContainer.innerHTML = ''; // Clear any existing content
+        playlists.forEach(playlist => {
+            const box = document.createElement('div');
+            box.classList.add('box');
+            const boxImg = document.createElement('div');
+            boxImg.classList.add('box-img');
+            const img = document.createElement('img');
+            img.src = playlist.profile;
+            img.alt = playlist.title;
+            boxImg.appendChild(img);
+
+            const title = document.createElement('h3');
+            title.textContent = playlist.title;
+
+            const details = document.createElement('span');
+            details.textContent = `${playlist.totalEpisodes} episodes | ${playlist.type || 'Genre'}`;
+
+            box.appendChild(boxImg);
+            box.appendChild(title);
+            box.appendChild(details);
+            box.addEventListener('click', () => {
+                window.location.href = `videoPlayer.html?playlistId=${playlist.id}`;
+            });
+            moviesContainer.appendChild(box);
+        });
+    };
+
+    const getCurrentPagePlaylists = () => {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        return allPlaylists.slice(startIndex, startIndex + itemsPerPage);
+    };
+
+    const updatePaginationControls = () => {
+        document.getElementById('current-page').textContent = currentPage;
+        document.getElementById('total-pages').textContent = totalPages;
+        document.getElementById('prev-page').disabled = currentPage === 1;
+        document.getElementById('next-page').disabled = currentPage === totalPages;
+    };
+
+    document.getElementById('prev-page').addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            displayPlaylists(getCurrentPagePlaylists());
+            updatePaginationControls();
+        }
+    });
+
+    document.getElementById('next-page').addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            displayPlaylists(getCurrentPagePlaylists());
+            updatePaginationControls();
+        }
+    });
+
+    const filterPlaylists = () => {
+        const selectedType = document.getElementById('playlist-type-filter').value;
+        const searchText = document.getElementById('search-box').value.toLowerCase();
+        const filteredPlaylists = allPlaylists.filter(playlist => {
+            const matchesType = selectedType ? playlist.type === selectedType : true;
+            const matchesSearch = playlist.title.toLowerCase().includes(searchText);
+            return matchesType && matchesSearch;
+        });
+        totalPages = Math.ceil(filteredPlaylists.length / itemsPerPage);
+        currentPage = 1;
+        displayPlaylists(filteredPlaylists.slice(0, itemsPerPage));
+        updatePaginationControls();
+    };
+
+    document.getElementById('playlist-type-filter').addEventListener('change', filterPlaylists);
+    document.getElementById('search-box').addEventListener('input', filterPlaylists);
+    document.getElementById('reset-filters').addEventListener('click', () => {
+        document.getElementById('playlist-type-filter').value = '';
+        document.getElementById('search-box').value = '';
+        totalPages = Math.ceil(allPlaylists.length / itemsPerPage);
+        currentPage = 1;
+        displayPlaylists(getCurrentPagePlaylists());
+        updatePaginationControls();
+    });
+
+    // Call the function to fetch and display playlists on page load
+    fetchAndDisplayPlaylists();
+});
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
     // Reference to the Firebase database

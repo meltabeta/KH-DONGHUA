@@ -135,6 +135,104 @@ body.dark-mode .navbar a {
     z-index: 1000001;
     display: none;
 }
+.filters {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    gap: 10px;
+}
+
+#playlist-type-filter {
+    padding: 8px;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex: 1;
+}
+
+#search-box {
+    padding: 8px;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    flex: 2;
+}
+
+#reset-filters {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--main-color);
+    border: none;
+    padding: 8px;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative; /* Ensure the tooltip is positioned relative to the button */
+}
+
+#reset-filters i {
+    font-size: 1.2rem;
+    color: var(--bg-color);
+}
+
+/* Tooltip styling */
+#reset-filters:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%; /* Position the tooltip above the button */
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-color);
+    color: var(--text-color);
+    padding: 5px 10px;
+    border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 0.8rem;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.2s;
+}
+
+#reset-filters::after {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s;
+}
+
+
+
+
+.pagination-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.pagination-controls button {
+    padding: 8px 16px;
+    border: none;
+    background-color: var(--main-color);
+    color: var(--bg-color);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.pagination-controls button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.pagination-controls span {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+
+
 
 .btn {
     padding: 0.5rem 1rem;
