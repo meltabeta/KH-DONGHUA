@@ -19,11 +19,14 @@
     --dark-bg-color: #181818;
     --dark-text-color: #fff;
     --dark-card-bg-color: #242424;
+    --transition-duration: 0.3s;
+    --transition-ease: ease-in-out;
 }
 
 body.dark-mode {
     background: var(--dark-bg-color);
     color: var(--dark-text-color);
+    transition: background var(--transition-duration) var(--transition-ease), color var(--transition-duration) var(--transition-ease);
 }
 
 header {
@@ -36,7 +39,7 @@ header {
     align-items: center;
     justify-content: space-between;
     padding: 10px 80px;
-    transition: 0.5s;
+    transition: background var(--transition-duration) var(--transition-ease), box-shadow var(--transition-duration) var(--transition-ease);
 }
 
 .header-buttons {
@@ -47,7 +50,7 @@ header {
 
 header.shadow {
     background: var(--bg-color);
-    box-shadow: 0 0 4px rgb(14 55 54/15%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 header.shadow .navbar a {
@@ -71,11 +74,11 @@ body.dark-mode header.shadow .logo {
 }
 
 .logo {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 600;
-    align-items: center;
     color: var(--bg-color);
     display: flex;
+    align-items: center;
     column-gap: 0.5rem;
 }
 
@@ -88,6 +91,11 @@ body.dark-mode .logo {
     height: 40px;
     border-radius: 50%;
     margin-right: 10px;
+    transition: transform var(--transition-duration) var(--transition-ease);
+}
+
+.logo-img:hover {
+    transform: scale(1.1);
 }
 
 .footer-logo-text {
@@ -112,9 +120,10 @@ body.dark-mode .footer-logo-text {
 }
 
 .navbar a {
-    font-size: 0.9rem;
+    font-size: 1rem;
     font-weight: 500;
     color: var(--bg-color);
+    transition: color var(--transition-duration) var(--transition-ease);
 }
 
 body.dark-mode .navbar a {
@@ -129,7 +138,7 @@ body.dark-mode .navbar a {
     position: absolute;
     bottom: -4px;
     left: 0;
-    transition: 0.4s all linear;
+    transition: width var(--transition-duration) var(--transition-ease);
 }
 
 .navbar a:hover::after,
@@ -157,6 +166,7 @@ body.dark-mode .navbar a {
     border: 1px solid #ccc;
     border-radius: 5px;
     flex: 1;
+    transition: border-color var(--transition-duration) var(--transition-ease);
 }
 
 #search-box {
@@ -165,6 +175,12 @@ body.dark-mode .navbar a {
     border: 1px solid #ccc;
     border-radius: 5px;
     flex: 2;
+    transition: border-color var(--transition-duration) var(--transition-ease);
+}
+
+#playlist-type-filter:hover,
+#search-box:hover {
+    border-color: var(--main-color);
 }
 
 #reset-filters {
@@ -177,6 +193,12 @@ body.dark-mode .navbar a {
     border-radius: 5px;
     cursor: pointer;
     position: relative; /* Ensure the tooltip is positioned relative to the button */
+    transition: background var(--transition-duration) var(--transition-ease), transform var(--transition-duration) var(--transition-ease);
+}
+
+#reset-filters:hover {
+    background: #fa1216;
+    transform: scale(1.05);
 }
 
 #reset-filters i {
@@ -200,13 +222,13 @@ body.dark-mode .navbar a {
     font-size: 0.8rem;
     opacity: 1;
     visibility: visible;
-    transition: opacity 0.2s;
+    transition: opacity var(--transition-duration) var(--transition-ease);
 }
 
 #reset-filters::after {
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.2s;
+    transition: opacity var(--transition-duration) var(--transition-ease);
 }
 
 .pagination-controls {
@@ -224,11 +246,17 @@ body.dark-mode .navbar a {
     color: var(--bg-color);
     border-radius: 5px;
     cursor: pointer;
+    transition: background var(--transition-duration) var(--transition-ease), transform var(--transition-duration) var(--transition-ease);
 }
 
 .pagination-controls button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+.pagination-controls button:not(:disabled):hover {
+    background: #fa1216;
+    transform: scale(1.05);
 }
 
 .pagination-controls span {
@@ -247,10 +275,12 @@ body.dark-mode .navbar a {
     text-align: center;
     display: inline-block;
     white-space: nowrap;
+    transition: background var(--transition-duration) var(--transition-ease), transform var(--transition-duration) var(--transition-ease);
 }
 
 .btn:hover {
     background: #fa1216;
+    transform: scale(1.05);
 }
 
 body.dark-mode .btn {
@@ -269,6 +299,11 @@ body.dark-mode .btn {
 #toggleDarkMode {
     font-size: 24px;
     cursor: pointer;
+    transition: color var(--transition-duration) var(--transition-ease), transform var(--transition-duration) var(--transition-ease);
+}
+
+#toggleDarkMode:hover {
+    transform: rotate(20deg);
 }
 
 #toggleDarkMode.bx-moon {
@@ -296,9 +331,9 @@ body.dark-mode #toggleDarkMode.bx-sun {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
     padding-top: 60px;
+    transition: background var(--transition-duration) var(--transition-ease);
 }
 
 .modal-content {
@@ -309,6 +344,9 @@ body.dark-mode #toggleDarkMode.bx-sun {
     width: 80%;
     max-width: 800px;
     text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform var(--transition-duration) var(--transition-ease);
 }
 
 body.dark-mode .modal-content {
@@ -316,17 +354,21 @@ body.dark-mode .modal-content {
     color: var(--dark-text-color);
 }
 
+.modal-content:hover {
+    transform: scale(1.02);
+}
+
 .close {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
+    transition: color var(--transition-duration) var(--transition-ease);
 }
 
 .close:hover,
 .close:focus {
     color: black;
-    text-decoration: none;
     cursor: pointer;
 }
 
@@ -335,6 +377,63 @@ body.dark-mode .modal-content {
     max-width: 100%;
     height: auto;
     margin-bottom: 20px;
+    border-radius: 10px;
+    transition: transform var(--transition-duration) var(--transition-ease);
+}
+
+.donate-modal-img:hover {
+    transform: scale(1.05);
+}
+
+/* Trailer Section */
+.trailer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    max-width: 968px;
+    overflow-y: scroll; /* Enable scrolling */
+    max-height: 530px; /* Adjusted height for better viewing */
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none;  /* For Internet Explorer and Edge */
+}
+
+.trailer-container::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Opera */
+}
+
+.trailer-container iframe {
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.trailer-container iframe.active {
+    transform: scale(1.02);
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .trailer-container {
+        max-height: 210px; /* Adjust height for better viewing on mobile */
+        padding: 10px; /* Add padding for better spacing */
+    }
+
+    .trailer-container iframe {
+        width: 100%;
+        height: auto; /* Adjust height for responsive design */
+        aspect-ratio: 16 / 9; /* Maintain aspect ratio */
+    }
+}
+
+/* Desktop */
+@media (min-width: 768px) {
+    .trailer-container iframe {
+        width: 900px;
+        height: 500px;
+    }
 }
 
 .modal-actions button, .modal-actions a {
@@ -346,6 +445,7 @@ body.dark-mode .modal-content {
     cursor: pointer;
     text-decoration: none;
     border-radius: 5px;
+    transition: background var(--transition-duration) var(--transition-ease), transform var(--transition-duration) var(--transition-ease);
 }
 
 body.dark-mode .modal-actions button,
@@ -355,10 +455,12 @@ body.dark-mode .modal-actions a {
 
 .modal-actions button:hover, .modal-actions a:hover {
     background-color: #fa1216;
+    transform: scale(1.05);
 }
 
 section {
     padding: 3.5rem 0 1rem;
+    transition: padding var(--transition-duration) var(--transition-ease);
 }
 
 .container {
@@ -367,7 +469,10 @@ section {
     position: relative;
     display: flex;
     align-items: center;
-    background: rgb(2, 3, 7, 0.5);
+    background: rgba(2, 3, 7, 0.5);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: background var(--transition-duration) var(--transition-ease), transform var(--transition-duration) var(--transition-ease);
 }
 
 .container img {
@@ -377,6 +482,11 @@ section {
     object-fit: cover;
     object-position: center;
     z-index: -1;
+    transition: transform var(--transition-duration) var(--transition-ease);
+}
+
+.container:hover img {
+    transform: scale(1.1);
 }
 
 .container::before {
@@ -388,6 +498,7 @@ section {
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     z-index: 0;
+    transition: background var(--transition-duration) var(--transition-ease);
 }
 
 .swiper-pagination-bullet {
@@ -396,6 +507,7 @@ section {
     border-radius: 0.2rem !important;
     background: var(--bg-color) !important;
     opacity: 1 !important;
+    transition: width var(--transition-duration) var(--transition-ease);
 }
 
 .swiper-pagination-bullet-active {
@@ -409,6 +521,7 @@ section {
     text-align: left;
     color: var(--bg-color);
     max-width: 500px;
+    transition: color var(--transition-duration) var(--transition-ease), padding var(--transition-duration) var(--transition-ease);
 }
 
 body.dark-mode .home-text {
@@ -432,6 +545,7 @@ body.dark-mode .home-text span {
     font-weight: 700;
     margin-bottom: 1rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    transition: font-size var(--transition-duration) var(--transition-ease), color var(--transition-duration) var(--transition-ease);
 }
 
 body.dark-mode .home-text h1 {
@@ -449,17 +563,19 @@ body.dark-mode .home-text h1 {
     padding: 8px;
     font-size: 1.8rem;
     border-radius: 50%;
-    border: 4px solid rgb(2, 3, 7, 0.5);
+    border: 4px solid rgba(2, 3, 7, 0.5);
     color: var(--main-color);
-}
-
-body.dark-mode .play .bx {
-    background: var(--dark-card-bg-color);
+    transition: background var(--transition-duration) var(--transition-ease), transform var(--transition-duration) var(--transition-ease);
 }
 
 .play .bx:hover {
     background: var(--main-color);
     color: var(--bg-color);
+    transform: scale(1.1);
+}
+
+body.dark-mode .play .bx {
+    background: var(--dark-card-bg-color);
 }
 
 body.dark-mode .play .bx:hover {
@@ -475,6 +591,7 @@ body.dark-mode .play .bx:hover {
     text-transform: uppercase;
     border-bottom: 1px solid var(--main-color);
     padding-bottom: 10px;
+    transition: border-color var(--transition-duration) var(--transition-ease), font-size var(--transition-duration) var(--transition-ease);
 }
 
 body.dark-mode .heading {
@@ -489,6 +606,7 @@ body.dark-mode .heading {
     margin-top: 2rem;
     padding-left: 10px;
     padding-right: 10px;
+    transition: margin-top var(--transition-duration) var(--transition-ease), padding var(--transition-duration) var(--transition-ease);
 }
 
 .movies-container {
@@ -496,28 +614,41 @@ body.dark-mode .heading {
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: 1rem;
     margin-top: 1rem;
+    transition: gap var(--transition-duration) var(--transition-ease);
+}
+
+.box {
+    transition: transform var(--transition-duration) var(--transition-ease);
+}
+
+.box:hover {
+    transform: translateY(-10px);
 }
 
 .box .box-img {
     width: 100%;
     height: 220px;
     cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: height var(--transition-duration) var(--transition-ease), border-radius var(--transition-duration) var(--transition-ease);
 }
 
 .box .box-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform var(--transition-duration) var(--transition-ease);
 }
 
 .box .box-img img:hover {
-    transform: translateY(-10px);
-    transition: 0.2s all linear;
+    transform: scale(1.05);
 }
 
 .box h3 {
     font-size: 0.8rem;
     font-weight: 500;
+    transition: font-size var(--transition-duration) var(--transition-ease), color var(--transition-duration) var(--transition-ease);
 }
 
 body.dark-mode .box h3 {
@@ -526,6 +657,7 @@ body.dark-mode .box h3 {
 
 .box span {
     font-size: 12px;
+    transition: font-size var(--transition-duration) var(--transition-ease), color var(--transition-duration) var(--transition-ease);
 }
 
 body.dark-mode .box span {
@@ -588,6 +720,7 @@ body.dark-mode .box span {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: max-width var(--transition-duration) var(--transition-ease);
 }
 
 body.dark-mode .footer {
@@ -598,6 +731,7 @@ body.dark-mode .footer {
     display: flex;
     align-items: center;
     column-gap: 0.5rem;
+    transition: column-gap var(--transition-duration) var(--transition-ease);
 }
 
 .social img {
@@ -605,11 +739,11 @@ body.dark-mode .footer {
     height: 40px;
     border-radius: 50%;
     cursor: pointer;
+    transition: transform var(--transition-duration) var(--transition-ease);
 }
 
 .social img:hover {
     transform: scale(1.1);
-    transition: 0.2s ease-in-out;
 }
 
 .social a {
@@ -621,18 +755,19 @@ body.dark-mode .footer {
     padding: 2px;
     font-size: 1.8rem;
     border-radius: 50%;
-    border: 4px solid rgb(2, 3, 7, 0.4);
+    border: 4px solid rgba(2, 3, 7, 0.4);
     color: var(--main-color);
-}
-
-body.dark-mode .social .bx {
-    background: var(--dark-card-bg-color);
+    transition: background var(--transition-duration) var(--transition-ease), transform var(--transition-duration) var(--transition-ease);
 }
 
 .social .bx:hover {
     background: var(--main-color);
     color: var(--bg-color);
-    transition: 0.2s all linear;
+    transform: scale(1.1);
+}
+
+body.dark-mode .social .bx {
+    background: var(--dark-card-bg-color);
 }
 
 body.dark-mode .social .bx:hover {
@@ -643,6 +778,7 @@ body.dark-mode .social .bx:hover {
     padding: 20px;
     text-align: center;
     color: var(--text-color);
+    transition: padding var(--transition-duration) var(--transition-ease), color var(--transition-duration) var(--transition-ease);
 }
 
 body.dark-mode .copyright {
@@ -701,8 +837,8 @@ body.dark-mode .copyright {
         background: var(--bg-color);
         row-gap: 1.4rem;
         padding: 20px;
-        box-shadow: 4px 4px 0 4px rgb(14 55 54/15%);
-        transition: 0.2s all linear;
+        box-shadow: 4px 4px 0 4px rgba(14, 55, 54, 0.15);
+        transition: top var(--transition-duration) var(--transition-ease), padding var(--transition-duration) var(--transition-ease);
         text-align: center;
         width: 100%;
     }

@@ -24,7 +24,10 @@
         <li><a href="#playlists">Playlists</a></li>
         <li><a href="#anime">Anime</a></li>
         <li><a href="#donghua">Donghua</a></li>
+        <li><a href="#trailer">Trailer</a></li>
+        <li><a href="shorts.html">Shorts</a></li>
     </ul>
+
     <div class="header-buttons">
         <a href="#" class="btn fixed-white" id="donateBtn">Donate Me!</a>
         <i class="bx bx-moon bx-sm" id="toggleDarkMode"></i>
@@ -52,6 +55,15 @@
     <div class="swiper-pagination"></div>
 </section>
 
+<!-- Trailer Section -->
+<section class="trailer" id="trailer">
+    <h2 class="heading">Trailer</h2>
+    <div class="trailer-container" id="trailerContainer">
+        <!-- Dynamic content will be inserted here -->
+    </div>
+</section>
+
+<!-- Existing Sections -->
 <div class="movies-section" id="playlists">
     <h2 class="heading">Playlist</h2>
     <!-- Filters -->
@@ -76,7 +88,6 @@
         <button id="next-page" class="btn fixed-white">Next</button>
     </div>
 </div>
-
 
 <!-- Anime -->
 <section class="anime" id="anime">
@@ -126,5 +137,32 @@
 <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-database.js"></script>
 <script src="main.js"></script>
+
+<!-- Visibility script included directly in the HTML -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const iframes = document.querySelectorAll('iframe');
+
+        const handleVisibilityChange = (entries, observer) => {
+            entries.forEach(entry => {
+                const iframe = entry.target;
+                const player = iframe.contentWindow;
+
+                if (entry.isIntersecting) {
+                    player.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                } else {
+                    player.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(handleVisibilityChange, {
+            threshold: 0.5 // Play when 50% of the iframe is visible
+        });
+
+        iframes.forEach(iframe => observer.observe(iframe));
+    });
+</script>
+
 </body>
 </html>
