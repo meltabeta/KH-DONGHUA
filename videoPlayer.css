@@ -24,6 +24,11 @@
     --dark-icon-color: #fff; /* Icon color for dark mode */
 }
 
+body {
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
 body.dark-mode {
     background: var(--dark-bg-color);
     color: var(--dark-text-color);
@@ -40,6 +45,13 @@ header {
     justify-content: space-between;
     padding: 10px 80px;
     transition: 0.5s;
+    background: var(--bg-color);
+    color: var(--text-color);
+}
+
+body.dark-mode header {
+    background: var(--dark-bg-color);
+    color: var(--dark-text-color);
 }
 
 .header-buttons {
@@ -49,7 +61,6 @@ header {
 }
 
 header.shadow {
-    background: var(--bg-color);
     box-shadow: 0 0 4px rgb(14 55 54/15%);
 }
 
@@ -62,7 +73,7 @@ header.shadow .logo {
 }
 
 body.dark-mode header.shadow {
-    background: var(--dark-bg-color);
+    box-shadow: 0 0 4px rgb(14 55 54/15%);
 }
 
 body.dark-mode header.shadow .navbar a {
@@ -77,7 +88,7 @@ body.dark-mode header.shadow .logo {
     font-size: 0.9rem;
     font-weight: 600;
     align-items: center;
-    color: var(--bg-color);
+    color: var(--text-color);
     display: flex;
     column-gap: 0.5rem;
 }
@@ -109,7 +120,7 @@ body.dark-mode .logo {
 .navbar a {
     font-size: 0.9rem;
     font-weight: 500;
-    color: var(--bg-color);
+    color: var(--text-color);
 }
 
 body.dark-mode .navbar a {
@@ -175,7 +186,7 @@ body.dark-mode .btn {
 }
 
 #toggleDarkMode.bx-moon {
-    color: var(--bg-color);
+    color: var(--text-color);
 }
 
 #toggleDarkMode.bx-sun {
