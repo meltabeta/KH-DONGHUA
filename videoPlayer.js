@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
         allEpisodesList.innerHTML = '';
         videos.forEach(video => {
             const listItem = document.createElement('li');
-            listItem.textContent = `${video.videoTitle} - Episode ${video.videoEpisode}`;
+            listItem.textContent = `Episode ${video.videoEpisode}`;
             listItem.addEventListener('click', () => {
                 window.location.href = `videoPlayer.html?playlistId=${playlistId}&episode=${video.videoEpisode}`;
             });
@@ -125,6 +125,8 @@ document.addEventListener('DOMContentLoaded', function () {
             videoPlayerContainer.webkitRequestFullscreen();
         } else if (videoPlayerContainer.msRequestFullscreen) { // IE/Edge
             videoPlayerContainer.msRequestFullscreen();
+        } else if (videoPlayerContainer.webkitEnterFullscreen) { // iOS Safari
+            videoPlayerContainer.webkitEnterFullscreen();
         }
     });
 
