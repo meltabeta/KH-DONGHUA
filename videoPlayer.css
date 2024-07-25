@@ -131,6 +131,34 @@ body.dark-mode .navbar a {
     width: 100%;
 }
 
+
+/* full screen */
+.video-controls button {
+    padding: 10px 20px;
+    font-family: 'JetBrains Mono', monospace;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007BFF;
+    color: #fff;
+    transition: background-color 0.3s ease;
+    font-size: 1em;
+    margin: 0 5px;
+}
+
+.video-controls button:hover {
+    background-color: #0056b3;
+}
+
+#fullscreenBtn {
+    background-color: #ff2c1f;
+}
+
+#fullscreenBtn:hover {
+    background-color: #d7231a;
+}
+
+
 #menu-icon {
     font-size: 28px; /* Increased the size for mobile */
     cursor: pointer;

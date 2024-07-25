@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const allEpisodesList = document.getElementById('allEpisodesList');
     const prevEpisodeBtn = document.getElementById('prevEpisodeBtn');
     const nextEpisodeBtn = document.getElementById('nextEpisodeBtn');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
 
     let videos = [];
     let currentVideoIndex = 0;
@@ -115,27 +116,34 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+    fullscreenBtn.addEventListener('click', () => {
+        if (videoPlayerContainer.requestFullscreen) {
+            videoPlayerContainer.requestFullscreen();
+        } else if (videoPlayerContainer.mozRequestFullScreen) { // Firefox
+            videoPlayerContainer.mozRequestFullScreen();
+        } else if (videoPlayerContainer.webkitRequestFullscreen) { // Chrome, Safari, and Opera
+            videoPlayerContainer.webkitRequestFullscreen();
+        } else if (videoPlayerContainer.msRequestFullscreen) { // IE/Edge
+            videoPlayerContainer.msRequestFullscreen();
+        }
+    });
+
     fetchVideoDetails();
 
-    // Function to toggle header shadow based on scroll position
     function toggleHeaderShadow() {
         const header = document.querySelector('header');
         header.classList.toggle('shadow', window.scrollY > 0);
     }
 
-    // Dark Mode Toggle
     const toggleDarkMode = document.getElementById('toggleDarkMode');
     toggleDarkMode.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
         toggleDarkMode.classList.toggle('bx-moon');
         toggleDarkMode.classList.toggle('bx-sun');
-        toggleHeaderShadow(); // Ensure header shadow is applied correctly
+        toggleHeaderShadow();
     });
 
-    // Initial check for header shadow on page load
     toggleHeaderShadow();
-
-    // Add scroll event listener to toggle header shadow
     window.addEventListener('scroll', toggleHeaderShadow);
 
     let menu = document.querySelector('#menu-icon');
