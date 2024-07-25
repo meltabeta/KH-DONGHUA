@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const btn = document.createElement('div');
             btn.classList.add('btn', 'fixed-white');
-            btn.textContent = 'Watch Now';
+            btn.textContent = 'Explore more';
             btn.addEventListener('click', () => {
                 const searchBox = document.getElementById('search-box');
                 searchBox.value = slide.title;
