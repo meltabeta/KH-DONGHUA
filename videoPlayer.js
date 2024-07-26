@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const playlistId = urlParams.get('playlistId');
     const episode = urlParams.get('episode');
 
+    console.log(`Playlist ID: ${playlistId}, Episode: ${episode}`);
+
     const videoPlayerContainer = document.getElementById('videoPlayerContainer');
     const playlistTitleElement = document.getElementById('playlistTitle');
     const episodeTitleElement = document.getElementById('episodeTitle');
@@ -54,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     videos.push(video);
                 }
             });
+            console.log('Fetched videos:', videos);
             videos.sort((a, b) => a.videoEpisode - b.videoEpisode);
             if (episode) {
                 currentVideoIndex = videos.findIndex(video => video.videoEpisode == episode);
@@ -72,6 +75,9 @@ document.addEventListener('DOMContentLoaded', function () {
             episodeTitleElement.textContent = `Episode ${video.videoEpisode}`;
             videoTitleElement.textContent = video.videoTitle;
             videoDescriptionElement.textContent = video.description || '';
+            console.log('Displaying video:', video);
+        } else {
+            console.log('No videos found for this playlist.');
         }
     }
 

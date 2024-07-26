@@ -10,6 +10,22 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+const auth = firebase.auth();
+
+// Auto sign-in as guest user
+auth.signInWithEmailAndPassword("userguest@gmail.com", "userguest@123")
+    .then((userCredential) => {
+        console.log('Signed in as guest:', userCredential.user.email);
+        fetchAndDisplayPlaylists();
+        fetchSlides();
+        fetchTrailers();
+        fetchAnimes();
+        fetchDonghua();
+    })
+    .catch((error) => {
+        console.error('Error signing in:', error);
+    });
+
 let header = document.querySelector('header');
 
 window.addEventListener('scroll', () => {
@@ -365,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const btn = document.createElement('div');
             btn.classList.add('btn', 'fixed-white');
-            btn.textContent = 'Watch Now';
+            btn.textContent = 'Explore now >_<';
             btn.addEventListener('click', () => {
                 const searchBox = document.getElementById('search-box');
                 searchBox.value = slide.title;
