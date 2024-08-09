@@ -9,6 +9,60 @@
     <script type="module" src="videoPlayer.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+     <style>
+       .carousel {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden; /* Ensure the overflow is hidden */
+            margin: 0 auto;
+            
+        }
+        .carousel-images {
+            display: flex;
+            transition: transform .5s ease-in-out;
+            
+        }
+        .carousel-images img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+        .prev,
+        .next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-size: 20px;
+            padding: 8px 12px;
+            border: none;
+            cursor: pointer;
+            z-index: 1;
+            border-radius: 50%; /* Round buttons */
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .prev {
+            left: 10px;
+        }
+        .next {
+            right: 10px;
+        }
+        .prev:hover,
+        .next:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        /* Add smooth transition */
+        .carousel-images {
+            transition: transform 0.5s ease-in-out;
+        }
+    </style> 
 </head>
 <body class="dark-mode">
 <div class="container">
@@ -31,6 +85,16 @@
     </header>
     <br>
     <main>
+        <div class="carousel">  
+            <div class="carousel-images">  
+                <img src="image1.jpg" alt="Image 1">  
+                <img src="image2.jpg" alt="Image 2">  
+                <img src="image3.jpg" alt="Image 3">  
+            </div>  
+            <button class="prev" onclick="moveSlide(-1)">&#10094;</button>  
+            <button class="next" onclick="moveSlide(1)">&#10095;</button>  
+        </div> 
+        <br> 
         <div class="video-section">
             <div class="breadcrumb">
                 <a href="index.html">Home</a> › <a href="#" id="playlistTitle">Playlist Title</a> › <span id="episodeTitle">Episode Title</span>
@@ -70,5 +134,34 @@
 </div>
 <script src="https://www.youtube.com/iframe_api"></script>
 <script src="clock.js" defer></script> <!-- Include clock.js -->
+<script>
+ let slideIndex = 0;
+
+function showSlide(index) {
+    const slides = document.querySelectorAll('.carousel-images img');
+    if (index >= slides.length) {
+        slideIndex = 0;
+    } 
+    if (index < 0) {
+        slideIndex = slides.length - 1;
+    }
+
+    const offset = -slideIndex * 100; // Calculate offset percentage
+    document.querySelector('.carousel-images').style.transform = `translateX(${offset}%)`;
+}
+
+function moveSlide(n) {
+    slideIndex += n;
+    showSlide(slideIndex);
+}
+
+// Auto-slide every 5 seconds
+setInterval(() => {
+    moveSlide(1);
+}, 5000);
+
+// Initialize carousel
+showSlide(slideIndex);
+</script>
 </body>
 </html>
