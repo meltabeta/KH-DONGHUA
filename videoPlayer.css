@@ -300,7 +300,7 @@ body.dark-mode .modal-actions a {
 
 main {
     padding: 2em;
-    padding-top: 100px;
+    padding-top: 2px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -521,6 +521,10 @@ body.dark-mode .video-controls button {
     cursor: pointer;
     font-size: 16px;
 }
+
+
+/* ========================================= */
+
 
 @media (max-width: 1080px) {
     .home-text {
